@@ -1,42 +1,23 @@
-#!/usr/bin/env perl
-use strict;
-use warnings;
+#! /bin/bash
 
-my ($grabnext, @vimopts, @files);
+# This script is intended to be sourced, not run
+if [[ $0 == $BASH_SOURCE ]]
+then
+    echo "This file should be run as"
+    echo "  source $0"
+    echo "and should not be run as"
+    echo "  sh $0"
+fi
 
-# Extract the ack pattern to use when spawning vim
-for (@ARGV) {
-    if ($grabnext or not /^-/) {
-        # Try to make vim's magic mode more like Perl's standard regexes
-        # Magic chars gleaned from :help magic, and the most common problem
-        # characters are < and >
-        my $vimpat = $_;
-           $vimpat =~ s{([<>=@!%/&])}{\\$1}g;
-           $vimpat =~ s{\\b}{\\W\\@=}g; # translate Perl's \b to \W\@= for vim
-        push @vimopts, '+1', '+/\v'.$vimpat;
-        last;
-    }
-    elsif (/^--$/) {
-        $grabnext = 1;
-    }
-}
-
-# Capture output without dealing with shell escaping
-my $pid = open my $kid, "-|";
-die "Can't fork: $!" unless defined $pid;
-
-if ($pid) {
-    @files = <$kid>;
-    chomp for @files;
-    close $kid;
-} else {
-    exec ack => '-l', @ARGV
-        or die "Can't exec ack: $!";
-}
-
-if (@files) {
-    exec vim => "-p", @vimopts, "--", @files
-        or die "Can't exec vim. $!";
-} else {
-    die "No matches to open.\n";
+vack ()
+{ 
+	local python_directory=$(dirname $BASH_SOURCE)
+	local python_script=$python_directory/viack.py
+	local bash_script=$python_directory/viack.sh
+	rm -f $bash_script
+	trap "{ rm -f $bash_script ; exit 0; }" EXIT
+	if PYTHONPATH=$python_directory python $python_script "$@" > $bash_script 2>&1
+	then bash $bash_script
+	else cat $bash_script
+	fi
 }
