@@ -119,6 +119,8 @@ def as_a_vim_command(args, paths_to_files):
 def run_vim_option():
 	return 'V'
 
+def verbose_option():
+	return 'v'
 
 def use_files(run_vim, args, paths_to_files):
 	if run_vim:
@@ -131,7 +133,7 @@ def use_files(run_vim, args, paths_to_files):
 
 
 def parse_command_line(command_line):
-	command_line, _consumed = remove_option(command_line, 'v')
+	command_line, _consumed = remove_option(command_line, verbose_option())
 	command_line, run_vim = remove_option(command_line, run_vim_option())
 	return shlex.split(command_line), run_vim
 
