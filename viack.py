@@ -117,10 +117,10 @@ def as_a_vim_command(args, paths_to_files):
 
 
 def run_vim_option():
-	return 'V'
+	return 'v'
 
 def verbose_option():
-	return 'v'
+	return 'V'
 
 def use_files(run_vim, args, paths_to_files):
 	if run_vim:
