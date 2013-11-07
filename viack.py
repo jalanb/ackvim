@@ -84,12 +84,34 @@ def worded(string):
 	return string
 
 
-def remove_option(option_string, option):
-	regexp = '-%s(\W|$)' % option
-	result_string = re.sub(regexp, '', option_string).replace(option, '')
-	if result_string == option_string:
-		option = ''
-	return result_string, option
+def remove_option(string, char):
+	"""Remove the given option char from the string
+
+	>>> remove_option('arg -x', 'x')
+	('arg ', 'x')
+	>>> remove_option('arg -x ', 'x')
+	('arg ', 'x')
+	>>> remove_option('-x arg', 'x')
+	('arg', 'x')
+	>>> remove_option('-xyz arg', 'x')
+	('-yz arg', 'x')
+	>>> remove_option('-y arg', 'x')
+	('-y arg', '')
+	>>> remove_option('-y xrg', 'x')
+	('-y xrg', '')
+	>>> remove_option('-x xrg', 'x')
+	('xrg', 'x')
+	>>> remove_option("--python -w 'v[34][0-9]' -v", 'v')
+	("--python -w 'v[34][0-9]' ", 'v')
+	"""
+	regexp = '-%s(\W|$)' % char
+	result_string = re.sub(regexp, '', string)
+	regexp = '-([a-z]*)%s([a-z]*)' % char
+	if re.search(regexp, result_string):
+		result_string = re.sub(regexp, r'-\1\2', result_string)
+	if result_string == string:
+		char = ''
+	return result_string, char
 
 
 def as_vim_args(args):
