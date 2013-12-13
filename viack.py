@@ -59,7 +59,7 @@ def bs_to_brackets(string):
 
 	ack uses the former, vim the latter, to mean start (or end) of word
 
-	>>> bs_to_brackets('\\bword\\b'') == '\\<word\\>'
+	>>> bs_to_brackets(r'\bword\b') == r'\<word\>'
 	True
 	"""
 	if '\\b' not in string:
@@ -70,6 +70,23 @@ def bs_to_brackets(string):
 	return end_of_word.sub('\\>', string)
 
 
+def escape_alternates(string):
+	"""Convert '(aaa|bbb|ccc)' to '\(aaa\|bbb\|ccc\)'
+
+	Not a generic solution for alternates
+		just covers the simple case
+
+	>>> escape_alternates('(aaa|bbb|ccc)') == r'\(aaa\|bbb\|ccc\)'
+	True
+	"""
+	try:
+		string = re.match('\((.*)\)', string).group(1)
+		string = string.replace('|', r'\|')
+		return r'\(%s\)' % string
+	except AttributeError:
+		return string
+
+
 def worded(string):
 	"""Add vim-style \< \> around each string
 
@@ -77,9 +94,9 @@ def worded(string):
 	>>> worded('word') == r'\<word\>' and worded(r'\<some words') == r'\<some words\>'
 	True
 	"""
-	if string[0] != r'\<':
+	if string[:2] != r'\<':
 		string = r'\<%s' % string
-	if string[-1] != r'\>':
+	if string[-2:] != r'\>':
 		string = r'%s\>' % string
 	return string
 
@@ -117,6 +134,7 @@ def remove_option(string, char):
 def as_vim_args(args):
 	"""Convert ack args to vim args"""
 	args = [bs_to_brackets(arg) for arg in args]
+	args = [escape_alternates(arg) for arg in args]
 	options, args = parse_args(args)
 	option_string = join_args(options)
 	if 'w' in option_string:
@@ -154,14 +172,22 @@ def use_files(run_vim, args, paths_to_files):
 	return os.EX_TEMPFAIL
 
 
-def parse_command_line(command_line):
-	command_line, _consumed = remove_option(command_line, verbose_option())
-	command_line, run_vim = remove_option(command_line, run_vim_option())
-	return shlex.split(command_line), run_vim
+def parse_command_line(args):
+	result = []
+	any_run_vim = False
+	for arg in args:
+		arg, _consumed = remove_option(arg, verbose_option())
+		if not arg:
+			continue
+		arg, run_vim = remove_option(arg, run_vim_option())
+		any_run_vim |= run_vim == run_vim_option()
+		if arg:
+			result.append(arg)
+	return result, any_run_vim
 
 
-def main(command_line):
-	args, run_vim = parse_command_line(command_line)
+def main(args):
+	args, run_vim = parse_command_line(args)
 	try:
 		paths_to_files = run_ack(args)
 		_, args = as_vim_args(args)
@@ -173,4 +199,4 @@ def main(command_line):
 
 
 if __name__ == '__main__':
-	sys.exit(main(' '.join(sys.argv[1:])))
+	sys.exit(main(sys.argv[1:]))
