@@ -9,14 +9,123 @@ then
     echo "  sh $0"
 fi
 
+VACK_DIRECTORY=$(dirname $BASH_SOURCE)
+
+aa ()
+{
+	Ack --all "$@"
+}
+
+ac ()
+{
+	Ack --code "$@"
+}
+
+ae ()
+{
+	Ack --erl "$@"
+}
+
+ag ()
+{
+	alias | grep "$@"
+}
+
+ai ()
+{ 
+    local sought=$1
+	shift
+    Ack --pyt '(import.*'"$sought|$sought"'.import)' "$@"
+}
+
+al ()
+{
+	Ack --html "$@"
+}
+
+ap ()
+{
+	Ack --python "$@"
+}
+
+at ()
+{
+	Ack --pyt "$@"
+}
+
+av ()
+{
+	vack "$@"
+}
+
+aaa ()
+{
+	Ack --nojunk "$@"
+}
+
+aav ()
+{
+	vack --all "$@"
+}
+
+acv ()
+{
+	vack --code "$@"
+}
+
+aev ()
+{
+	vack --erl "$@"
+}
+
+alv ()
+{
+	vack --html "$@"
+}
+
+apv ()
+{
+	vack --python "$@"
+}
+
+atv ()
+{
+	vack --pyt "$@"
+}
+
+awv ()
+{
+	vack -w "$@"
+}
+
+aiw ()
+{ 
+    local sought=$1
+    ack --pyt "(import.*\b$sought\b|\b$sought\b.import)"
+}
+
+ash ()
+{
+	Ack --shell "$@"
+}
+
+Ack ()
+{
+	$(python $VACK_DIRECTORY/ack_vack.py "$@")
+}
+
+aaav ()
+{
+	vack --nojunk "$@"
+}
+
 vack ()
 { 
-	local python_directory=$(dirname $BASH_SOURCE)
-	local python_script=$python_directory/viack.py
-	local bash_script=$python_directory/viack.sh
+	local python_script=$VACK_DIRECTORY/viack.py
+	local bash_script=$VACK_DIRECTORY/viack.sh
 	rm -f $bash_script
 	trap "{ rm -f $bash_script ; exit 0; }" EXIT
-	if PYTHONPATH=$python_directory python $python_script "$@" > $bash_script 2>&1
+	if PYTHONPATH=$VACK_DIRECTORY python $python_script "$@" > $bash_script 2>&1
 	then bash $bash_script
 	else cat $bash_script
 	fi
