@@ -1,0 +1,23 @@
+The viack module
+================
+
+    >>> import viack
+    >>> print viack.__doc__
+    Script to integrate ack with vim
+
+
+Removing options
+----------------
+
+Do not take out a v option that is part a word
+    >>> viack.remove_option("--python -w 'v[34][0-9]' -v", 'v')
+    ("--python -w 'v[34][0-9]' ", 'v')
+
+
+Do take it out from "-java"
+    >>> viack.remove_option('-java -w hello -v', 'v')
+    ('-jaa -w hello ', 'v')
+
+But not from "--java"
+    >>> viack.remove_option('--java -w hello -v', 'v')
+    ('--java -w hello ', 'v')
