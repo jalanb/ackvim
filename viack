@@ -130,3 +130,8 @@ vack ()
 	else cat $bash_script
 	fi
 }
+
+vap ()
+{
+    vack --python -v "$@"
+}
