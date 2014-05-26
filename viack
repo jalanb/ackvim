@@ -35,7 +35,7 @@ ai ()
 { 
     local sought=$1
 	shift
-    Ack --pyt '(import.*'"$sought|$sought"'.import)' "$@"
+    Ack --pyt '(import.*'"$sought|$sought"'.*import)' "$@"
 }
 
 al ()
