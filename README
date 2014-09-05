@@ -1,10 +1,10 @@
-Some words which help the interface beween ack and vim, which allows lines line
+Some words which help the interface beween ack and vim, which allows lines like
 
 $ ack -p -w main -v
 
-which searches all python files for the word main, and opens vim with all those files and telling vim to search for the word main
+which searches all python files for the word main, and opens vim with all those files and tellis vim to search for the word main
 
-Also allows 
+Also allows lines like
 
 $ vai sys
 
