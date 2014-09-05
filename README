@@ -1,0 +1,19 @@
+Some words which help the interface beween ack and vim, which allows lines line
+
+$ ack -p -w main -v
+
+which searches all python files for the word main, and opens vim with all those files and telling vim to search for the word main
+
+Also allows 
+
+$ vai sys
+
+which searches all python files for any "import sys" or "from sys import", and vims those files with that search
+
+This code WFM (I use it daily in bash), YMMV
+
+Readers who got this far went on to view:
+
+https://bitbucket.org/mjwhitta/zoom
+https://github.com/tsibley/viack
+https://github.com/sampson-chen/sack
