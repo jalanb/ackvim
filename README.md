@@ -7,7 +7,7 @@ Some words which help the interface beween [ack](http://beyondgrep.com/) and [vi
 viack allows lines in [bash](https://www.gnu.org/software/bash/) like
 
 ```shell
-$ ap -w main -v
+ap -w main -v
 ```
 
 which tells ack to search all python files for the word main, and tells vim to open all those files searching for the word main
@@ -15,7 +15,7 @@ which tells ack to search all python files for the word main, and tells vim to o
 Also allows lines like
 
 ```shell
-$ vai sys
+vai sys
 ```
 
 which searches all python files for any "import sys" or "from sys import", and vims those files with that search
