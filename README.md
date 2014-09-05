@@ -38,6 +38,6 @@ Makes [bash functions with abbreviated names](https://github.com/jalanb/viack/bl
 
 ## Readers who got this far went on to view:
 
-* [viack](https://github.com/tsibley/viack)
-* [zoom](https://bitbucket.org/mjwhitta/zoom)
-* [sack](https://github.com/sampson-chen/sack)
+* [Thomas Sibley](http://tsibley.net/)'s [viack](https://github.com/tsibley/viack)
+* [Miles Whittaker](https://plus.google.com/+MilesWhittaker_mjwhitta/about)'s [zoom](https://bitbucket.org/mjwhitta/zoom)
+* [Sampson Chen](http://sampsonchen.com/)'s [sack](https://github.com/sampson-chen/sack)
