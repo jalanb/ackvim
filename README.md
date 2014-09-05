@@ -10,7 +10,7 @@ viack allows lines in [bash](https://www.gnu.org/software/bash/) like
 $ ap -w main -v
 ```
 
-which searches all python files for the word main, and opens vim with all those files and tellis vim to search for the word main
+which tells ack to search all python files for the word main, and tells vim to open all those files searching for the word main
 
 Also allows lines like
 
