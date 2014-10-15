@@ -131,6 +131,16 @@ vack ()
 	fi
 }
 
+vvack ()
+{
+    vack "$*" -v
+}
+
+vall ()
+{
+    vack --all "$@"
+}
+
 vap ()
 {
     vack --python -v "$@"
