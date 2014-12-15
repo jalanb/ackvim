@@ -119,6 +119,11 @@ aaav ()
 	vack --nojunk "$@"
 }
 
+apnt ()
+{
+    ap --ignore-dir=test "$@"
+}
+
 vack ()
 { 
 	local python_script=$VACK_DIRECTORY/viack.py
