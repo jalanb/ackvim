@@ -9,7 +9,7 @@ then
     echo "  sh $0"
 fi
 
-VACK_DIRECTORY=$(dirname $BASH_SOURCE)
+VACK_DIR=$(dirname $BASH_SOURCE)
 
 aa ()
 {
@@ -111,7 +111,7 @@ ash ()
 
 Ack ()
 {
-	$(python $VACK_DIRECTORY/ack_vack.py "$@")
+	$(python $VACK_DIR/ack_vack.py "$@")
 }
 
 aaav ()
@@ -126,11 +126,13 @@ apnt ()
 
 vack ()
 { 
-	local python_script=$VACK_DIRECTORY/viack.py
-	local bash_script=$VACK_DIRECTORY/viack.sh
+	local python_script=$VACK_DIR/viack.py
+	local bash_script=$VACK_DIR/viack.sh
 	rm -f $bash_script
 	trap "{ rm -f $bash_script ; exit 0; }" EXIT
-	if PYTHONPATH=$VACK_DIRECTORY python $python_script "$@" > $bash_script 2>&1
+	local python_options=-v
+	[[ "$@" =~ -v ]] && python_options=
+	if PYTHONPATH=$VACK_DIR python $python_script $python_options "$@" > $bash_script 2>&1
 	then bash $bash_script
 	else cat $bash_script
 	fi
