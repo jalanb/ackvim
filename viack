@@ -114,6 +114,11 @@ Ack ()
 	$(python $VACK_DIR/ack_vack.py "$@")
 }
 
+aack ()
+{
+    vack "$*" -v
+}
+
 aaav ()
 {
 	vack --nojunk "$@"
@@ -140,7 +145,7 @@ vack ()
 
 vvack ()
 {
-    vack "$*" -v
+	vack --nojunk "$@"
 }
 
 vall ()
