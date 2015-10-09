@@ -111,6 +111,7 @@ ash ()
 
 _ack ()
 {
+    python -c "print '\n\033[0;36m%s\033[0m\n' % ('#' * $(tput cols))"
 	$(python $VACK_DIR/ack_vack.py "$@")
 }
 
