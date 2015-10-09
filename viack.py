@@ -185,8 +185,6 @@ def parse_command_line(args):
         arg, _consumed = remove_option(arg, verbose_option())
         if not arg:
             continue
-        #import pudb
-        #pudb.set_trace()
         arg, run_vim = remove_option(arg, run_vim_option())
         any_run_vim |= run_vim == run_vim_option()
         if arg:
