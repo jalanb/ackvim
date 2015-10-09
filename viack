@@ -11,127 +11,103 @@ fi
 
 VACK_DIR=$(dirname $BASH_SOURCE)
 
-aa ()
-{
+aa () {
 	ack --all "$@"
 }
 
-ac ()
-{
+ac () {
 	ack --code "$@"
 }
 
-ae ()
-{
+ae () {
 	ack --erl "$@"
 }
 
-ag ()
-{
+ag () {
 	alias | grep "$@"
 }
 
-ai ()
-{ 
+ai () { 
     local sought=$1
 	shift
     ack --pyt '(import.*'"$sought|$sought"'.*import)' "$@"
 }
 
-al ()
-{
+al () {
 	ack --html "$@"
 }
 
-ap ()
-{
+ap () {
 	ack --python "$@"
 }
 
-at ()
-{
+at () {
 	ack --pyt "$@"
 }
 
-av ()
-{
+av () {
 	vack "$@"
 }
 
-aaa ()
-{
+aaa () {
 	ack --nojunk "$@"
 }
 
-aav ()
-{
+aav () {
 	vack --all "$@"
 }
 
-acv ()
-{
+acv () {
 	vack --code "$@"
 }
 
-aev ()
-{
+aev () {
 	vack --erl "$@"
 }
 
-alv ()
-{
+alv () {
 	vack --html "$@"
 }
 
-apv ()
-{
+apv () {
 	vack --python "$@"
 }
 
-atv ()
-{
+atv () {
 	vack --pyt "$@"
 }
 
-awv ()
-{
+awv () {
 	vack -w "$@"
 }
 
-aiw ()
-{ 
+aiw () { 
     local sought=$1
     ack --pyt "(import.*\b$sought\b|\b$sought\b.import)"
 }
 
-ash ()
-{
+ash () {
 	ack --shell "$@"
 }
 
-ack ()
-{
+ack () {
     python -c "print '\n\033[0;36m%s\033[0m\n' % ('#' * $(tput cols))"
     $(ACK=$(which ack) python $VACK_DIR/ack_vack.py "$@")
 }
 
-aack ()
-{
+aack () {
     vack "$*" -v
 }
 
-aaav ()
-{
+aaav () {
 	vack --nojunk "$@"
 }
 
-apnt ()
-{
+apnt () {
     ap --ignore-dir=test "$@"
 }
 
-vack ()
-{ 
+vack () { 
 	local python_script=$VACK_DIR/viack.py
 	local bash_script=$VACK_DIR/viack.sh
 	rm -f $bash_script
@@ -144,17 +120,14 @@ vack ()
 	fi
 }
 
-vvack ()
-{
+vvack () {
 	vack --nojunk "$@"
 }
 
-vall ()
-{
+vall () {
     vack --all "$@"
 }
 
-vap ()
-{
+vap () {
     vack --python -v "$@"
 }
