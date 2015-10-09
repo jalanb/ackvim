@@ -1,20 +1,20 @@
 # viack
 
-viack eases the interface beween [ack](http://beyondgrep.com/) and [vim](http://www.vim.org/), so that ack's findings can be found with vim as well.
+viack eases the interface beween [ack](http://beyondgrep.com/) and [vim](http://www.vim.org/), so that `ack`'s findings can be found with `vim` as well.
 
-It helps by running ack commands, gathering the results and using vim to edit any found files, and telling vim to search for similar strings to those ack sought. The strings vim searches for are "similar", not "the same", because the two commands use different regexp languages, so viack converts the strings.
+It helps by running `ack` commands, gathering the results and using `vim` to edit any found files, and telling `vim` to search for similar strings to those `ack` sought. The strings `vim` searches for are "similar", not "the same", because the two commands use different regexp languages, so viack converts the strings.
 
-viack is useful at the bash command line, it is not used within vim.
+viack is useful at the [bash](https://www.gnu.org/software/bash/) command line, it is not used within `vim`.
 
 ## Usage
 
-viack allows lines in [bash](https://www.gnu.org/software/bash/) like
+viack allows lines in `bash` like
 
 ```shell
 ap -w main -v
 ```
 
-which tells ack to search all python files for the word main, and tells vim to open all those files searching for the word main
+which tells `ack` to search all python files for the word main, and tells `vim` to open all those files searching for the word main
 
 And it allows lines like
 
@@ -38,7 +38,7 @@ vim -d viack/ackrc ~/.ackrc
 ```
 
 ## Options
-Because it needs to handle options for both ack and vim, viack does not provide any options itself. Rather it provides individual commands, such as the following which add filetype options to the ack command line
+Because it needs to handle options for both `ack` and `vim`, viack does not provide any options itself. Rather it provides individual commands, such as the following which add filetype options to the `ack` command line
 
 command | filetype
 --------|---------
@@ -53,9 +53,9 @@ command | filetype
 
 Some commands add other options, e.g. `ai` searches in python files for imports only. [RTFS](https://github.com/jalanb/viack/blob/master/viack) for more commands
 
-Each `a...` command has a matching `va...` command which runs the ack command, and sends the results on to vim. And, for the convenience of those using readlines "vi mode" at the command line, each also has an equivalent `aa...` alias.
+Each `a...` command has a matching `va...` command which runs the `ack` command, and sends the results on to `vim`. And, for the convenience of those using readlines "vi mode" at the command line, each also has an equivalent `aa...` alias.
 
-So, to search for "fred" using ack the command is the usual
+So, to search for "fred" using `ack` the command is the usual
 
 ```shell
 ack fred
@@ -67,7 +67,7 @@ Or, to search only in web files:
 al fred
 ```
 
-To do the same searches, and then open the results in vim the commands would be
+To do the same searches, and then open the results in `vim` the commands would be
 
 ```shell
 vack fred
@@ -83,12 +83,12 @@ aal fred
 
 ## How does it work?
 
-viack provides [bash functions with abbreviated names](https://github.com/jalanb/viack/blob/master/viack), all of which [eventually](https://github.com/jalanb/viack/blob/master/viack#L113) hand over to [a python program](https://github.com/jalanb/viack/blob/master/viack.py) which interprets arguments, and does some conversion of ack to vim regexps, before sending the correct vim command to stdout. Bash captures that and runs it.
+viack provides [bash functions with abbreviated names](https://github.com/jalanb/viack/blob/master/viack), all of which [eventually](https://github.com/jalanb/viack/blob/master/viack#L113) hand over to [a python program](https://github.com/jalanb/viack/blob/master/viack.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
 
 ## Limitations
 
 * viack only provides the commands I have needed - searching in shell, python, and web files. But they are very easy to extend
-* viack needs to handle options from the shell command line for both ack and vim. The code which handles this is a "good enough" hack
+* viack needs to handle options from the shell command line for both `ack` and `vim`. The code which handles this is a "good enough" hack
 
 ## Readers who got this far went on to view:
 
