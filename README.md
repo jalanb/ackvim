@@ -49,7 +49,7 @@ command | filetype
    ap   |  --python
    at   |  --pyt
 
-(These filetypes are defined in the ackrc file included in this repository)
+(These filetypes are defined in the ackrc file [included in this repository](https://github.com/jalanb/viack/blob/master/ackrc)
 
 Some commands add other options, e.g. `ai` searches in python files for imports only. [RTFS](https://github.com/jalanb/viack/blob/master/viack) for more commands
 
