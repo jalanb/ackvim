@@ -23,10 +23,6 @@ ae () {
 	ack --erl "$@"
 }
 
-ag () {
-	alias | grep "$@"
-}
-
 ai () { 
     local sought=$1
 	shift
