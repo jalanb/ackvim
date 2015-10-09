@@ -13,17 +13,17 @@ VACK_DIR=$(dirname $BASH_SOURCE)
 
 aa ()
 {
-	_ack --all "$@"
+	ack --all "$@"
 }
 
 ac ()
 {
-	_ack --code "$@"
+	ack --code "$@"
 }
 
 ae ()
 {
-	_ack --erl "$@"
+	ack --erl "$@"
 }
 
 ag ()
@@ -35,22 +35,22 @@ ai ()
 { 
     local sought=$1
 	shift
-    _ack --pyt '(import.*'"$sought|$sought"'.*import)' "$@"
+    ack --pyt '(import.*'"$sought|$sought"'.*import)' "$@"
 }
 
 al ()
 {
-	_ack --html "$@"
+	ack --html "$@"
 }
 
 ap ()
 {
-	_ack --python "$@"
+	ack --python "$@"
 }
 
 at ()
 {
-	_ack --pyt "$@"
+	ack --pyt "$@"
 }
 
 av ()
@@ -60,7 +60,7 @@ av ()
 
 aaa ()
 {
-	_ack --nojunk "$@"
+	ack --nojunk "$@"
 }
 
 aav ()
@@ -106,13 +106,13 @@ aiw ()
 
 ash ()
 {
-	_ack --shell "$@"
+	ack --shell "$@"
 }
 
-_ack ()
+ack ()
 {
     python -c "print '\n\033[0;36m%s\033[0m\n' % ('#' * $(tput cols))"
-	$(python $VACK_DIR/ack_vack.py "$@")
+    $(ACK=$(which ack) python $VACK_DIR/ack_vack.py "$@")
 }
 
 aack ()
