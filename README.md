@@ -41,3 +41,6 @@ Makes [bash functions with abbreviated names](https://github.com/jalanb/viack/bl
 * [Thomas Sibley](http://tsibley.net/)'s [viack](https://github.com/tsibley/viack)
 * [Miles Whittaker](https://plus.google.com/+MilesWhittaker_mjwhitta/about)'s [zoom](https://gitlab.com/mjwhitta/zoom)
 * [Sampson Chen](http://sampsonchen.com/)'s [sack](https://github.com/sampson-chen/sack)
+
+###
+Although this code was originally forked from [viack](https://github.com/tsibley/viack) we have diverged completely, hence the copyright claim in the LICENSE file
