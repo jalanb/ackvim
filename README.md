@@ -25,9 +25,16 @@ vai sys
 which searches all python files for any "import sys" or "from sys import", and vims those files with that search
 ## Install
 
+Clone the repository and source a file to add viack's command into `bash`
 ```shell
 git clone https://github.com/jalanb/viack.git
 source viack/viack
+```
+
+Merge viack's ackrc file into `ack`'s config file in $HOME
+
+```shell
+vim -d viack/ackrc ~/.ackrc
 ```
 
 ## Options
