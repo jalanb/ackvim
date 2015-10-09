@@ -53,7 +53,7 @@ command | filetype
 
 Some commands add other options, e.g. `ai` searches in python files for imports only. [RTFS](https://github.com/jalanb/viack/blob/master/viack) for more commands
 
-Each `a...` command has a matching `va...` command which runs the `ack` command, and sends the results on to `vim`. And, for the convenience of those using readlines "vi mode" at the command line, each also has an equivalent `aa...` alias.
+Each `a...` command has a matching `va...` command which runs the `ack` command, and sends the results on to `vim`. And, for the convenience of those using `readline`'s [vi mode](http://tiswww.case.edu/php/chet/readline/rluserman.html#SEC22) at the command line, each also has an equivalent `aa...` alias.
 
 So, to search for "fred" using `ack` the command is the usual
 
