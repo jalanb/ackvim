@@ -39,5 +39,5 @@ Makes [bash functions with abbreviated names](https://github.com/jalanb/viack/bl
 ## Readers who got this far went on to view:
 
 * [Thomas Sibley](http://tsibley.net/)'s [viack](https://github.com/tsibley/viack)
-* [Miles Whittaker](https://plus.google.com/+MilesWhittaker_mjwhitta/about)'s [zoom](https://bitbucket.org/mjwhitta/zoom)
+* [Miles Whittaker](https://plus.google.com/+MilesWhittaker_mjwhitta/about)'s [zoom](https://gitlab.com/mjwhitta/zoom)
 * [Sampson Chen](http://sampsonchen.com/)'s [sack](https://github.com/sampson-chen/sack)
