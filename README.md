@@ -1,6 +1,6 @@
 # viack
 
-Some words which help the interface beween [ack](http://beyondgrep.com/) and [vim](https://duckduckgo.com/l/?kh=-1&uddg=http%3A%2F%2Fwww.vim.org%2F).
+Some words which help the interface beween [ack](http://beyondgrep.com/) and [vim](http://www.vim.org/).
 
 ## Usage
 
