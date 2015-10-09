@@ -104,8 +104,8 @@ apnt () {
 }
 
 vack () { 
-	local python_script=$VACK_DIR/viack.py
-	local bash_script=$VACK_DIR/viack.sh
+	local python_script=$VACK_DIR/ack2vim.py
+	local bash_script=$VACK_DIR/ack2vim.sh
 	rm -f $bash_script
 	trap "{ rm -f $bash_script ; exit 0; }" EXIT
 	local python_options=-v
