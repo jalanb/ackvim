@@ -98,6 +98,6 @@ ack2vim provides [bash functions with abbreviated names](https://github.com/jala
 * [Miles Z Sterrett](http://mileszs.com/)'s [ack.vim](https://github.com/mileszs/ack.vim)
 
 ###
-Although this code was originally forked from [ack2vim](https://github.com/tsibley/ack2vim) we have diverged completely, hence the copyright claim in the LICENSE file
+Although this code was originally forked from [viack](https://github.com/tsibley/viack) we have diverged completely, hence the copyright claim in the LICENSE file
 
 This code [WFM](http://www.urbandictionary.com/define.php?term=wfm) and I use it daily, but [caveat lector](http://www.urbandictionary.com/define.php?term=ymmv)
