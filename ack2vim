@@ -23,6 +23,9 @@ ae () {
 	ack --erl "$@"
 }
 
+af () {
+    ack --python \\s*def."$@"
+}
 ai () { 
     local sought=$1
 	shift
