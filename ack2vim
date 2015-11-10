@@ -98,6 +98,10 @@ ack () {
     $(ACK=$(which ack) python $VACK_DIR/ack_vack.py "$@")
 }
 
+vap () {
+    vack --python -v "$@"
+}
+
 # xxxx
 
 aack () {
@@ -130,5 +134,16 @@ vall () {
 }
 
 # xxxxx
+
+quack () {
+    local _result=1
+    for $item in "$@"; do
+        if has_py $item; then
+            python  $1
+            _result=0
+        fi
+    done
+    return $_result
+}
 
 }
