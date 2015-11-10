@@ -11,6 +11,8 @@ fi
 
 VACK_DIR=$(dirname $BASH_SOURCE)
 
+# xx
+
 aa () {
 	ack --all "$@"
 }
@@ -47,6 +49,8 @@ at () {
 av () {
 	vack "$@"
 }
+
+# xxx
 
 aaa () {
 	ack --nojunk "$@"
@@ -94,6 +98,8 @@ ack () {
     $(ACK=$(which ack) python $VACK_DIR/ack_vack.py "$@")
 }
 
+# xxxx
+
 aack () {
     vack "$*" -v
 }
@@ -119,14 +125,10 @@ vack () {
 	fi
 }
 
-vvack () {
-	vack --nojunk "$@"
-}
-
 vall () {
     vack --all "$@"
 }
 
-vap () {
-    vack --python -v "$@"
+# xxxxx
+
 }
