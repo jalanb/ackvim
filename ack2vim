@@ -14,83 +14,83 @@ VACK_DIR=$(dirname $BASH_SOURCE)
 # xx
 
 aa () {
-	ack --all "$@"
+    ack --all "$@"
 }
 
 ac () {
-	ack --code "$@"
+    ack --code "$@"
 }
 
 ae () {
-	ack --erl "$@"
+    ack --erl "$@"
 }
 
 af () {
     ack --python \\s*def."$@"
 }
-ai () { 
+ai () {
     local sought=$1
-	shift
+    shift
     ack --pyt '(import.*'"$sought|$sought"'.*import)' "$@"
 }
 
 al () {
-	ack --html "$@"
+    ack --html "$@"
 }
 
 ap () {
-	ack --python "$@"
+    ack --python "$@"
 }
 
 at () {
-	ack --pyt "$@"
+    ack --pyt "$@"
 }
 
 av () {
-	vack "$@"
+    vack "$@"
 }
 
 # xxx
 
 aaa () {
-	ack --nojunk "$@"
+    ack --nojunk "$@"
 }
 
 aav () {
-	vack --all "$@"
+    vack --all "$@"
 }
 
 acv () {
-	vack --code "$@"
+    vack --code "$@"
 }
 
 aev () {
-	vack --erl "$@"
+    vack --erl "$@"
 }
 
 alv () {
-	vack --html "$@"
+    vack --html "$@"
 }
 
 apv () {
-	vack --python "$@"
+    vack --python "$@"
 }
 
 atv () {
-	vack --pyt "$@"
+    vack --pyt "$@"
 }
 
 awv () {
-	vack -w "$@"
+    vack -w "$@"
 }
 
-aiw () { 
+aiw () {
     local sought=$1
     ack --pyt "(import.*\b$sought\b|\b$sought\b.import)"
 }
 
 ash () {
-	ack --shell "$@"
+    ack --shell "$@"
 }
 
 ack () {
@@ -109,24 +109,24 @@ aack () {
 }
 
 aaav () {
-	vack --nojunk "$@"
+    vack --nojunk "$@"
 }
 
 apnt () {
     ap --ignore-dir=test "$@"
 }
 
-vack () { 
-	local python_script=$VACK_DIR/ack2vim.py
-	local bash_script=$VACK_DIR/ack2vim.sh
-	rm -f $bash_script
-	trap "{ rm -f $bash_script ; exit 0; }" EXIT
-	local python_options=-v
-	[[ "$@" =~ -v ]] && python_options=
-	if PYTHONPATH=$VACK_DIR python $python_script $python_options "$@" > $bash_script 2>&1
-	then bash $bash_script
-	else cat $bash_script
-	fi
+vack () {
+    local python_script=$VACK_DIR/ack2vim.py
+    local bash_script=$VACK_DIR/ack2vim.sh
+    rm -f $bash_script
+    trap "{ rm -f $bash_script ; exit 0; }" EXIT
+    local python_options=-v
+    [[ "$@" =~ -v ]] && python_options=
+    if PYTHONPATH=$VACK_DIR python $python_script $python_options "$@" > $bash_script 2>&1
+    then bash $bash_script
+    else cat $bash_script
+    fi
 }
 
 vall () {
@@ -134,6 +134,11 @@ vall () {
 }
 
 # xxxxx
+
+clack () {
+    clear
+    ack "$@"
+}
 
 quack () {
     local _result=1
@@ -146,4 +151,6 @@ quack () {
     return $_result
 }
 
+vvack () {
+	vack --nojunk "$@"
 }
