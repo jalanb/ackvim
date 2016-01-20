@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/cat
 
 # This script is intended to be sourced, not run
 if [[ $0 == $BASH_SOURCE ]]
@@ -9,13 +9,14 @@ then
     echo "  sh $0"
 fi
 
-VACK_DIR=$(dirname $BASH_SOURCE)
+
+# x
+
+# a is a function
 
 # xx
 
-aa () {
-    ack --all "$@"
-}
+# so is aa
 
 ac () {
     ack --code "$@"
@@ -93,9 +94,21 @@ ash () {
     ack --shell "$@"
 }
 
+VACK_DIR=$(dirname $(readlink -f $BASH_SOURCE))
+
 ack () {
     python -c "print '\n\033[0;36m%s\033[0m\n' % ('#' * $(tput cols))"
-    $(ACK=$(which ack) python $VACK_DIR/ack_vack.py "$@")
+    local _sought="$@"; [[ $* == v ]] && _sought=$(pbpaste)
+    cmd="$(python $VACK_DIR/ack_vack.py $_sought)"
+    $cmd
+}
+
+a () {
+    ack "$@"
+}
+
+aa () {
+    vack "$@"
 }
 
 vap () {
@@ -105,7 +118,7 @@ vap () {
 # xxxx
 
 aack () {
-    vack "$*" -v
+    vack "$@" -v
 }
 
 aaav () {
@@ -116,9 +129,17 @@ apnt () {
     ap --ignore-dir=test "$@"
 }
 
+aash () {
+    vack --shell "$@"
+}
+
+lack () {
+    ack -l "$@"
+}
+
 vack () {
     local python_script=$VACK_DIR/ack2vim.py
-    local bash_script=$VACK_DIR/ack2vim.sh
+    local bash_script=$VACK_DIR/ack2vim.bash
     rm -f $bash_script
     trap "{ rm -f $bash_script ; exit 0; }" EXIT
     local python_options=-v
@@ -152,5 +173,7 @@ quack () {
 }
 
 vvack () {
-	vack --nojunk "$@"
+    vack --nojunk "$@"
 }
+
+# echo "from ack2vim"
