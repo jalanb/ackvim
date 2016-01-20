@@ -1,5 +1,7 @@
 #! /bin/cat
 
+# set -x
+
 # This script is intended to be sourced, not run
 if [[ $0 == $BASH_SOURCE ]]
 then
@@ -55,6 +57,10 @@ av () {
 
 aaa () {
     ack --nojunk "$@"
+}
+
+aap () {
+    ack --python -v "$@"
 }
 
 aav () {
@@ -177,3 +183,4 @@ vvack () {
 }
 
 # echo "from ack2vim"
+# set +x
