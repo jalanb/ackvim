@@ -5,18 +5,41 @@ import re
 import sys
 import commands
 
+def assert_perl_script(path):
+    """Raise errors if that path is not a perl script
+
+    It is a perl script if it
+        1. is a file, and
+        2.a. has a '.pl' extension, or
+        2.b. mentions 'perl' in first line
+    """
+    if not os.path.isfile(path):
+        raise NotImplementedError('"%s" is not a file' % path)
+    stem, ext = os.path.splitext(path)
+    if ext == '.pl':
+        return
+    with open(path) as stream:
+        if 'perl' in stream.readline():
+            return
+    raise NotImplementedError('%s is not a perl script' % path)
+
+
 def which_ack():
+    """Find the system 'ack' with which
+
+    Should be a perl script
+    """
     ack = os.environ.get('ACK') or 'ack'
     if not ack or not os.path.isfile(ack):
         status, output = commands.getstatusoutput('which ack')
         if status != os.EX_OK:
             raise NotImplementedError('"which ack" failed: "%s"' % output)
         ack = output
-    if not os.path.isfile(ack):
-        raise NotImplementedError('"%s" is not a file' % ack)
+    assert_perl_script(ack)
     return ack
 
 def main(args):
+    """Run this script as a program"""
     if '-U' in sys.argv:
         import pudb
         pudb.set_trace()
