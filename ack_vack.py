@@ -14,7 +14,9 @@ def assert_perl_script(path):
         2.b. mentions 'perl' in first line
     """
     if not os.path.isfile(path):
+        #  I prefer string interpolation operator over format()
         raise NotImplementedError('"%s" is not a file' % path)
+
     stem, ext = os.path.splitext(path)
     if ext == '.pl':
         return
