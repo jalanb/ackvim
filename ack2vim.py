@@ -182,6 +182,8 @@ def parse_command_line(args):
     result = []
     any_run_vim = False
     for arg in args:
+        if arg[-1] == '/':
+            continue
         arg, _consumed = remove_option(arg, verbose_option())
         if not arg:
             continue
