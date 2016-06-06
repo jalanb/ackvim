@@ -6,9 +6,14 @@
 
 
 _gvep () {
-    s="$1"; shift;
-    vim -p $(grep "$s" -r * 2>/dev/null | sed -e s/:.*// | sort | uniq | tr '\n' ' ') "$@" +/"$s";
-    git status $(grep "$s" -r * 2>/dev/null | sed -e s/:.*// | sort | uniq | tr '\n' ' ') "$@";
+    local _s="$1"; shift;
+    local _paths=$(grep "$_s" -r * 2>/dev/null | sed -e s/:.*// | sort | uniq | tr '\n' ' ')
+    if [[ -z "$_paths" ]]; then
+        echo "\"""$_s""\" not found"
+        return 1
+    fi
+    vim -p $_paths "$@" +/"$_s";
+    git status $_paths "$@";
 }
 
 gvep () {

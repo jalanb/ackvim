@@ -31,10 +31,11 @@ ae () {
 af () {
     ack --python \\s*def."$@"
 }
+
 ai () {
     local sought=$1
     shift
-    ack --pyt '(import.*'"$sought|$sought"'.*import)' "$@"
+    $(which ack) --pyt '(import.*'"$sought|$sought"'.*import)' "$@"
 }
 
 al () {
