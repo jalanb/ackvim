@@ -87,6 +87,55 @@ atv () {
     vack --pyt "$@"
 }
 
+av_ () {
+    (cd $1; a "$@" -v)
+}
+
+avb () {
+    __doc__="vack all args in $JAB/src/bash";
+    av_ $JAB/src/bash "$@"
+}
+
+avd () {
+    __doc__="vack all args in $DASHBOARD";
+    av_ $DASHBOARD "$@"
+}
+
+avg () {
+    __doc__="vack all args in $GIT";
+    av_ $GIT "$@"
+}
+
+avh () {
+    __doc__="vack all args in $HUB";
+    av_ $HUB "$@"
+}
+
+avj () {
+    __doc__="vack all args in $JAB";
+    av_ $JAB "$@"
+}
+
+avp () {
+    __doc__="vack all args in $JAB/src/python";
+    av_ $JAB/src/python "$@"
+}
+
+avs () {
+    __doc__="vack all args in $SRC";
+    av_ $SRC "$@"
+}
+
+avu () {
+    __doc__="vack all args in ~";
+    av_ ~ "$@"
+}
+
+avv () {
+    __doc__="vack all args in $JAB/vim";
+    av_ $JAB/vim "$@"
+}
+
 awv () {
     vack -w "$@"
 }
