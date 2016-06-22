@@ -61,7 +61,14 @@ aaa () {
 }
 
 aap () {
-    ack --python -v "$@"
+    local _root=${1:-.}
+    local _pattern=${2:-def.main}
+    local _ignores=( /test /lib /__pycache__ )
+    ap \
+        ${_ignores[@]/#\// --ignore-dir } "$_pattern" $_root -l | \
+        grep -v -e '###' -e '^\s*$' | \
+        tr '\n' ' ' | \
+        sed -e 's:^:vim -p :' -e "s:$: +/ $_pattern:"
 }
 
 aav () {
@@ -152,11 +159,32 @@ ash () {
 
 VACK_DIR=$(dirname $(readlink -f $BASH_SOURCE))
 
+ack_python () {
+    (cd $(dirname $(readlink -f $BASH_SOURCE))
+    local _script=$1; shift
+    if [[  $PYTHON_DEBUGGING == -U|| $DEBUGGING == www ]]; then
+        python $_script $PYTHON_DEBUGGING "$@"
+    else
+        $(python $_script "$@")
+    fi
+    )
+}
+
 ack () {
     python -c "print '\n\033[0;36m%s\033[0m\n' % ('#' * $(tput cols))"
+    # /usr/local/bin/ack "$@"
+    # return
     local _sought="$@"; [[ $* == v ]] && _sought=$(pbpaste)
     cmd="$(python $VACK_DIR/ack_vack.py $_sought)"
-    $cmd
+    (cd $VACK_DIR
+    if [[ $* == v ]]; then
+        ack_python ack_vack.py $(pbpaste)
+    elif [[ $1 == PASTE ]]; then
+        shift
+        ack_python ack_vack.py $(pbpaste) "$@"
+    else
+        ack_python ack_vack.py "$@"
+    fi)
 }
 
 a () {
@@ -194,16 +222,15 @@ lack () {
 }
 
 vack () {
-    local python_script=$VACK_DIR/ack2vim.py
-    local bash_script=$VACK_DIR/ack2vim.bash
-    rm -f $bash_script
-    trap "{ rm -f $bash_script ; exit 0; }" EXIT
     local python_options=-v
     [[ "$@" =~ -v ]] && python_options=
-    if PYTHONPATH=$VACK_DIR python $python_script $python_options "$@" > $bash_script 2>&1
-    then bash $bash_script
-    else cat $bash_script
-    fi
+    (cd $VACK_DIR
+    if ack_python ack2vim.py $python_options "$@" > ack2vim.bash 2>&1; then
+        trap "{ rm -f $bash_script ; exit 0; }" EXIT
+        bash $bash_script
+    else
+        cat $bash_script
+    fi)
 }
 
 vall () {
