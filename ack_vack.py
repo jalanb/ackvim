@@ -51,13 +51,15 @@ def main(args):
             words[0] = 'vack'
             words.append(word)
         else:
-            if ' ' in word:
+            if re.search('[.(]', word):
                 if ' $' in word:
                     words.append("'%s'" % word)
                 else:
                     words.append('"%s"' % word)
             else:
                 words.append(word)
+    script = os.path.join(os.path.dirname(__file__), 'ack2vim.sh')
+    words[0:0] = ('.', script, ';')
     print ' '.join(words)
 
 if __name__ == '__main__':
