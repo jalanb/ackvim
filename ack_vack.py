@@ -35,7 +35,9 @@ def which_ack():
     if not ack or not os.path.isfile(ack):
         status, output = commands.getstatusoutput('which ack')
         if status != os.EX_OK:
-            raise NotImplementedError('"which ack" failed: "%s"' % output)
+            status, output = commands.getstatusoutput('PATH=/usr/local/bin:/usr/bin:/bin which ack')
+            if status != os.EX_OK:
+                raise NotImplementedError('"which ack" failed: "%s"' % output)
         ack = output
     assert_perl_script(ack)
     return ack
