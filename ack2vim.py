@@ -45,10 +45,16 @@ def args_to_strings(args):
     return join_args(options), join_quoted_args(args)
 
 
+def run_command_in_path(command):
+    return commands.getstatusoutput('%s %s' % ('PATH=/usr/local/bin:/usr/bin:/bin', command))
+
+
 def run_ack(args):
-    command = 'ack --files-with-matches --nocolor %s %s' % (
-        args_to_strings(args))
-    status, output = commands.getstatusoutput(command)
+    status, output = run_command_in_path('which ack')
+    ack = status and 'ack' or output
+    ack_command = '%s --files-with-matches --nocolor %%s %%s' % ack
+    command = ack_command % (args_to_strings(args))
+    status, output = run_command_in_path(command)
     if status:
         raise ShellError(status, output)
     return output.splitlines()
