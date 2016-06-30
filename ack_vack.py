@@ -60,8 +60,6 @@ def main(args):
                     words.append('"%s"' % word)
             else:
                 words.append(word)
-    script = os.path.join(os.path.dirname(__file__), 'ack2vim.sh')
-    words[0:0] = ('.', script, ';')
     print ' '.join(words)
 
 if __name__ == '__main__':
