@@ -59,7 +59,7 @@ av () {
 # xxx
 
 aaa () {
-    ack --nojunk "$@"
+    vack --nojunk "$@"
 }
 
 aap () {
@@ -110,52 +110,22 @@ ash () {
     ack --shell "$@"
 }
 
-VACK_DIR=$(dirname $(readlink -f $BASH_SOURCE))
-
-ack_python () {
-    (cd $(dirname $(readlink -f $BASH_SOURCE))
-    local _script=$1; shift
-    if [[  $PYTHON_DEBUGGING == -U|| $DEBUGGING == www ]]; then
-        python $_script $PYTHON_DEBUGGING "$@"
-    else
-        $(python $_script "$@")
-    fi
-    )
-}
-
 ack () {
-    python -c "print '\n\033[0;36m%s\033[0m\n' % ('#' * $(tput cols))"
-    # /usr/local/bin/ack "$@"
-    # return
-    local _sought="$@"; [[ $* == v ]] && _sought=$(pbpaste)
-    cmd="$(python $VACK_DIR/ack_vack.py $_sought)"
-    (cd $VACK_DIR
-    if [[ $* == v ]]; then
-        ack_python ack_vack.py $(pbpaste)
-    elif [[ $1 == PASTE ]]; then
-        shift
-        ack_python ack_vack.py $(pbpaste) "$@"
+    if [[ $# -gt 0 && ${!#} =~ -v ]]; then
+        vack "${@/-v/}"
     else
-        ack_python ack_vack.py "$@"
-    fi)
-}
-
-a () {
-    ack "$@"
-}
-
-aa () {
-    vack "$@"
+        ackack "$@"
+    fi
 }
 
 vap () {
-    vack --python -v "$@"
+    vack --python "$@"
 }
 
 # xxxx
 
 aack () {
-    vack "$@" -v
+    vack "$@"
 }
 
 aaav () {
@@ -171,7 +141,7 @@ aash () {
 }
 
 lack () {
-    ack -l "$@"
+    ackack -l "$@"
 }
 
 convert_regexp () {
@@ -181,15 +151,8 @@ convert_regexp () {
 
 vack () {
     local _regexp=$(convert_regexp "$@")
-    local python_options=-v
-    [[ "$@" =~ -v ]] && python_options=
-    (cd $VACK_DIR
-    if ack_python ack2vim.py $python_options "$@" > ack2vim.bash 2>&1; then
-        trap "{ rm -f $bash_script ; exit 0; }" EXIT
-        bash $bash_script
-    else
-        cat $bash_script
-    fi)
+    local _files=$(ackack -l "$@" | tr '\n' ' ')
+    vim -p $_files +/$_regexp
 }
 
 vall () {
@@ -218,3 +181,17 @@ vvack () {
     vack --nojunk "$@"
 }
 
+# xxxxxx
+
+ackack () {
+    [[ $* =~ -l ]] || python -c "print '\n\033[0;36m%s\033[0m\n' % ('#' * $(tput cols))"
+    local _script="$(dirname $(readlink -f $BASH_SOURCE))/ack_vack.py"
+    local _paste=
+    [[ $* == v || $1 == PASTE ]] && _paste=$(pbpaste)
+    [[ $1 == PASTE ]] && shift
+    if [[  $PYTHON_DEBUGGING == -U || $DEBUGGING == www ]]; then
+        python $_script $PYTHON_DEBUGGING "$@"
+    else
+        $(python $_script "$@")
+    fi
+}
