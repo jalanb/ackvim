@@ -53,7 +53,7 @@ def main(args):
             words[0] = 'vack'
             words.append(word)
         else:
-            if re.search('[.(]', word):
+            if ' ' in word and re.search('[.(]', word):
                 if ' $' in word:
                     words.append("'%s'" % word)
                 else:
