@@ -10,6 +10,9 @@ import commands
 from convert_regexps import convert
 
 
+__version__ = '0.3.0'
+
+
 class ShellError(Exception):
     def __init__(self, status, output):
         Exception.__init__(self, output)

@@ -5,6 +5,9 @@ import re
 import sys
 
 
+__version__ = '0.3.0'
+
+
 def bs_to_brackets(string):
     r"""Convert \b to \< or \>
 

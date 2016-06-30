@@ -5,6 +5,10 @@ import re
 import sys
 import commands
 
+
+__version__ = '0.3.0'
+
+
 def assert_perl_script(path):
     """Raise errors if that path is not a perl script
 
