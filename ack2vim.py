@@ -7,6 +7,9 @@ import sys
 import commands
 
 
+from convert_regexps import convert
+
+
 class ShellError(Exception):
     def __init__(self, status, output):
         Exception.__init__(self, output)
@@ -60,39 +63,6 @@ def run_ack(args):
     return output.splitlines()
 
 
-def bs_to_brackets(string):
-    r"""Convert \b to \< or \>
-
-    ack uses the former, vim the latter, to mean start (or end) of word
-
-    >>> bs_to_brackets(r'\bword\b') == r'\<word\>'
-    True
-    """
-    if '\\b' not in string:
-        return string
-    start_of_word = re.compile(r'(^|\W)\\b')
-    string = start_of_word.sub(r'\<', string)
-    end_of_word = re.compile(r'\\b(\w|$)')
-    return end_of_word.sub(r'\>', string)
-
-
-def escape_alternates(string):
-    r"""Convert '(aaa|bbb|ccc)' to '\(aaa\|bbb\|ccc\)'
-
-    Not a generic solution for alternates
-        just covers the simple case
-
-    >>> escape_alternates('(aaa|bbb|ccc)') == r'\(aaa\|bbb\|ccc\)'
-    True
-    """
-    try:
-        string = re.match(r'\((.*)\)', string).group(1)
-        string = string.replace('|', r'\|')
-        return r'\(%s\)' % string
-    except AttributeError:
-        return string
-
-
 def worded(string):
     r"""Add vim-style \< \> around each string
 
@@ -141,8 +111,7 @@ def remove_option(string, char):
 
 def as_vim_args(args):
     """Convert ack args to vim args"""
-    args = [bs_to_brackets(arg) for arg in args]
-    args = [escape_alternates(arg) for arg in args]
+    args = convert(args)
     options, args = parse_args(args)
     option_string = join_args(options)
     if 'w' in option_string:

@@ -221,7 +221,13 @@ lack () {
     ack -l "$@"
 }
 
+convert_regexp () {
+    VACK_DIR=$(dirname $(readlink -f $BASH_SOURCE))
+    python $VACK_DIR/convert_regexps.py "$@"
+}
+
 vack () {
+    local _regexp=$(convert_regexp "$@")
     local python_options=-v
     [[ "$@" =~ -v ]] && python_options=
     (cd $VACK_DIR
