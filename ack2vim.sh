@@ -70,31 +70,23 @@ aap () {
     vack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
-aav () {
-    vack --all "$@"
-}
-
-acv () {
+aac () {
     vack --code "$@"
 }
 
-aev () {
+aae () {
     vack --erl "$@"
 }
 
-alv () {
+aal () {
     vack --html "$@"
 }
 
-apv () {
-    vack --python "$@"
-}
-
-atv () {
+aat () {
     vack --pyt "$@"
 }
 
-awv () {
+aaw () {
     vack -w "$@"
 }
 
@@ -115,22 +107,10 @@ ack () {
     fi
 }
 
-vap () {
-    vack --python "$@"
-}
-
 # xxxx
 
-aack () {
-    vack "$@"
-}
-
-aaav () {
-    vack --nojunk "$@"
-}
-
-apnt () {
-    ap --ignore-dir=test "$@"
+aaaa () {
+    vack --all "$@"
 }
 
 aash () {
@@ -152,30 +132,11 @@ vack () {
     vim -p $_files +/$_regexp
 }
 
-vall () {
-    vack --all "$@"
-}
-
 # xxxxx
 
 clack () {
     clear
     ack "$@"
-}
-
-quack () {
-    local _result=1
-    for $item in "$@"; do
-        if has_py $item; then
-            python  $1
-            _result=0
-        fi
-    done
-    return $_result
-}
-
-vvack () {
-    vack --nojunk "$@"
 }
 
 # xxxxxx
