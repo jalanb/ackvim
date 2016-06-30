@@ -1,7 +1,5 @@
 #! /bin/cat
 
-# set -x
-
 # This script is intended to be sourced, not run
 if [[ $0 == $BASH_SOURCE ]]
 then
@@ -220,5 +218,3 @@ vvack () {
     vack --nojunk "$@"
 }
 
-# echo "from ack2vim"
-# set +x
