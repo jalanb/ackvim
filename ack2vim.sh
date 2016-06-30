@@ -45,7 +45,9 @@ al () {
 }
 
 ap () {
-    ack --python "$@"
+    local _pattern=${1:-def.main}
+    local _ignores=( /test /lib /__pycache__ )
+    ack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 at () {
@@ -63,14 +65,9 @@ aaa () {
 }
 
 aap () {
-    local _root=${1:-.}
-    local _pattern=${2:-def.main}
+    local _pattern=${1:-def.main}
     local _ignores=( /test /lib /__pycache__ )
-    ap \
-        ${_ignores[@]/#\// --ignore-dir } "$_pattern" $_root -l | \
-        grep -v -e '###' -e '^\s*$' | \
-        tr '\n' ' ' | \
-        sed -e 's:^:vim -p :' -e "s:$: +/ $_pattern:"
+    vack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 aav () {
