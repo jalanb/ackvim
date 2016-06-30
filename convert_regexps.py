@@ -45,7 +45,7 @@ def convert(strings):
 
 
 def main(args):
-    converted = convert([_ for _ in args if _[0] != '-'])
+    converted = convert([_ for _ in args if _ and _[0] != '-'])
     print ' '.join(converted)
     return 0
 
