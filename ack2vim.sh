@@ -45,7 +45,6 @@ al () {
 }
 
 ap () {
-    local _pattern=${1:-def.main}
     local _ignores=( /test /lib /__pycache__ )
     ack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
@@ -65,7 +64,6 @@ aaa () {
 }
 
 aap () {
-    local _pattern=${1:-def.main}
     local _ignores=( /test /lib /__pycache__ )
     vack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
