@@ -83,7 +83,7 @@ al fred -v
 
 ## How does it work?
 
-ack2vim provides [bash functions with abbreviated names](https://github.com/jalanb/ack2vim/blob/master/ack2vim.sh), all of which [eventually](https://github.com/jalanb/ack2vim/blob/master/ack2vim.sh#L149) hand over to [a python program](https://github.com/jalanb/ack2vim/blob/master/ack_vack.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
+ack2vim provides [bash functions with abbreviated names](https://github.com/jalanb/ack2vim/blob/master/ack2vim.sh#L15), all of which [eventually](https://github.com/jalanb/ack2vim/blob/master/ack2vim.sh#L149) hand over to [a python program](https://github.com/jalanb/ack2vim/blob/master/ack_vack.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
 
 ## Limitations
 
