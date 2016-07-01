@@ -19,7 +19,7 @@ which tells `ack` to search all python files for the word main, and tells `vim` 
 And it allows lines like
 
 ```shell
-vai sys
+aai sys
 ```
 
 which searches all python files for any "import sys" or "from sys import", and vims those files with that search
@@ -28,7 +28,7 @@ which searches all python files for any "import sys" or "from sys import", and v
 Clone the repository and source a file to add ack2vim's command into `bash`
 ```shell
 git clone https://github.com/jalanb/ack2vim.git
-source ack2vim/ack2vim
+source ack2vim/ack2vim.sh
 ```
 
 Merge ack2vim's ackrc file into `ack`'s config file in $HOME
@@ -38,7 +38,7 @@ vim -d ack2vim/ackrc ~/.ackrc
 ```
 
 ## Options
-Because it needs to handle options for both `ack` and `vim`, ack2vim does not provide any options itself. Rather it provides individual commands, such as the following which add filetype options to the `ack` command line
+Because it needs to handle options for both `ack` and `vim`, ack2vim provides only one option itself. Rather it provides individual commands, such as the following which add filetype options to the `ack` command line
 
 command | filetype
 --------|---------
@@ -53,7 +53,7 @@ command | filetype
 
 Some commands add other options, e.g. `ai` searches in python files for imports only. [RTFS](https://github.com/jalanb/ack2vim/blob/master/ack2vim) for more commands
 
-Each `a...` command has a matching `va...` command which runs the `ack` command, and sends the results on to `vim`. And, for the convenience of those using `readline`'s [vi mode](http://tiswww.case.edu/php/chet/readline/rluserman.html#SEC22) at the command line, each also has an equivalent `aa...` alias.
+Each `a...` command recognises one option `-v` which runs the `a...` command, and sends the results on to `vim`. And, for the convenience of those using `readline`'s [vi mode](http://tiswww.case.edu/php/chet/readline/rluserman.html#SEC22) at the command line, each also has an equivalent `aa...` alias.
 
 So, to search for "fred" using `ack` the command is the usual
 
@@ -70,20 +70,20 @@ al fred
 To do the same searches, and then open the results in `vim` the commands would be
 
 ```shell
-vack fred
-val fred
+aack fred
+aal fred
 ```
 
 or, equivalently
 
 ```shell
-aack fred
-aal fred
+ack fred -v
+al fred -v
 ```
 
 ## How does it work?
 
-ack2vim provides [bash functions with abbreviated names](https://github.com/jalanb/ack2vim/blob/master/ack2vim), all of which [eventually](https://github.com/jalanb/ack2vim/blob/master/ack2vim#L113) hand over to [a python program](https://github.com/jalanb/ack2vim/blob/master/ack2vim.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
+ack2vim provides [bash functions with abbreviated names](https://github.com/jalanb/ack2vim/blob/master/ack2vim), all of which [eventually](https://github.com/jalanb/ack2vim/blob/master/ack2vim.sh#L149) hand over to [a python program](https://github.com/jalanb/ack2vim/blob/master/ack_vack.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
 
 ## Limitations
 
