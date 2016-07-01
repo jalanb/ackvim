@@ -6,7 +6,7 @@ import sys
 import commands
 
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 
 def assert_perl_script(path):
