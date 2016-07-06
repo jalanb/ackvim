@@ -3,6 +3,8 @@
 
 import re
 import sys
+import commands
+import itertools
 
 
 __version__ = '0.4.4'
@@ -47,8 +49,68 @@ def convert(strings):
     return escaped_strings
 
 
+def ack_help(help):
+    status, output = commands.getstatusoutput(
+        'PATH=/usr/local/bin:/usr/bin:/bin ack --%s' % help)
+    if status:
+        raise ValueError(output)
+    return [_[2:] for _ in output.splitlines() if _.startswith('  -')]
+
+
+def ackrc_types():
+    types_set = [_ for _ in ack_help('dump') if _.startswith('--type')]
+    types = (re.split('[:=]', _)[1] for _ in types_set)
+    return ['--(no)?%s' % _ for _ in types]
+
+
+def ack_options():
+    options = ack_help('help') + ack_help('help-types')
+    bare_options = [re.sub('\s\s+.*','', _).split(', ') for _ in options]
+    bare_option_list = [_ for _ in itertools.chain(*bare_options) if _ != '-?']
+    bare_regexps = [_.replace('[no]', '(no)?') for _ in bare_option_list]
+    bare_regexps.extend(ackrc_types())
+    return ([_.split(' ')[0] for _ in bare_regexps if ' ' in _],
+            [re.split('[=[]', _)[0] for _ in bare_regexps if '=' in _],
+            [_ for _ in bare_regexps if '=' not in _ and ' ' not in _])
+
+
+def match_option(regexps, string):
+    for regexp in regexps:
+        if re.match(regexp, string):
+            return True
+    return False
+
+
+def detach_ack_option(args):
+    spaced, equalled, plain = ack_options()
+    if not args:
+        return args
+    arg = args[0]
+    i = 0
+    if match_option(plain, arg):
+        i = 1
+    if match_option(spaced, arg):
+        i = 2
+    if match_option(equalled, arg):
+        if '=' in arg:
+            i = 1
+        else:
+            i = 2
+    return args[:i], args[i:]
+
+
+def remove_ack_options(args):
+    if not args:
+        return args
+    option, args = detach_ack_option(args)
+    if option:
+        return remove_ack_options(args)
+    return args[:1] + remove_ack_options(args[1:])
+
+
 def main(args):
-    converted = convert([_ for _ in args if _ and _[0] != '-'])
+    non_ack_args = remove_ack_options(args)
+    converted = convert(non_ack_args)
     print ' '.join(converted)
     return 0
 

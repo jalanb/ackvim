@@ -127,7 +127,7 @@ convert_regexp () {
 vack () {
     local _regexp=$(convert_regexp "$@")
     local _files=$(ackack -l "$@" | tr '\n' ' ')
-    vim -p $_files +/$_regexp
+    [[ -n $_files ]] && vim -p $_files +/$_regexp
 }
 
 # xxxxx
