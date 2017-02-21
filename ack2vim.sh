@@ -63,11 +63,6 @@ aaa () {
     vack --nojunk "$@"
 }
 
-aap () {
-    local _ignores=( /test /lib /__pycache__ )
-    vack ${_ignores[@]/#\// --ignore-dir } --python "$@"
-}
-
 aac () {
     vack --code "$@"
 }
@@ -76,8 +71,17 @@ aae () {
     vack --erl "$@"
 }
 
+aaf () {
+    vack --python \\s*def."$@"
+}
+
 aal () {
     vack --html "$@"
+}
+
+aap () {
+    local _ignores=( /test /lib /__pycache__ )
+    vack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 aat () {
