@@ -102,7 +102,7 @@ Although this code was originally forked from [viack](https://github.com/tsibley
 
 This code [WFM](http://www.urbandictionary.com/define.php?term=wfm) and I use it daily, but [caveat lector](http://www.urbandictionary.com/define.php?term=ymmv)
 
-Who Doesn't Want Badges?
+Who Doesn't Love Badges?
 ------------------------
 
 [![Build Status](https://travis-ci.org/jalanb/ack2vim.svg?branch=master)](https://travis-ci.org/jalanb/ack2vim)
