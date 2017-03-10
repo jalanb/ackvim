@@ -101,3 +101,32 @@ ack2vim provides [bash functions with abbreviated names](https://github.com/jala
 Although this code was originally forked from [viack](https://github.com/tsibley/viack) we have diverged completely, hence the copyright claim in the LICENSE file
 
 This code [WFM](http://www.urbandictionary.com/define.php?term=wfm) and I use it daily, but [caveat lector](http://www.urbandictionary.com/define.php?term=ymmv)
+
+Latest PyPi Package
+-------------------
+
+.. image:: https://badge.fury.io/py/ack2vim.svg
+   :target: https://pypi.python.org/pypi/ack2vim
+   :alt: PyPi Package
+
+Build status
+------------
+
+.. image:: https://travis-ci.org/jalanb/ack2vim.svg?branch=master
+   :target: https://travis-ci.org/jalanb/ack2vim
+   :alt: Build Status
+
+Test Coverage
+-------------
+
+.. image:: https://codecov.io/gh/jalanb/ack2vim/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/jalanb/ack2vim
+   :alt: Test Coverage
+
+Dependency status
+-----------------
+
+.. image:: https://caniusepython3.com/check/e81a8847-131d-4893-a47e-d4bd04e8817e.svg
+    :target: https://caniusepython3.com/check/e81a8847-131d-4893-a47e-d4bd04e8817e
+    :alt: Python 3 Status
+
