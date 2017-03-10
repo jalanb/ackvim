@@ -106,4 +106,4 @@ Who Doesn't Want Badges?
 ------------------------
 
 [![Build Status](https://travis-ci.org/jalanb/ack2vim.svg?branch=master)](https://travis-ci.org/jalanb/ack2vim)
-[![Test Coverage](https://codecov.io/gh/jalanb/dotsite/branch/master/graph/badge.svg)](https://codecov.io/gh/jalanb/dotsite)
+[![Test Coverage](https://codecov.io/gh/jalanb/ack2vim/branch/master/graph/badge.svg)](https://codecov.io/gh/jalanb/ack2vim)
