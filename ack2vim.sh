@@ -1,5 +1,7 @@
 #! /bin/cat
 
+[[ -n $WELCOME_BYE ]] && echo Welcome to $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f)
+
 # This script is intended to be sourced, not run
 if [[ $0 == $BASH_SOURCE ]]
 then
@@ -12,12 +14,14 @@ fi
 
 # x
 
+unalias a 2>/dev/null
 a () {
     ack "$@"
 }
 
 # xx
 
+unalias aa 2>/dev/null
 aa () {
     aack "$@"
 }
@@ -59,6 +63,7 @@ av () {
 
 # xxx
 
+unalias aaa 2>/dev/null
 aaa () {
     aack --nojunk "$@"
 }
@@ -157,3 +162,5 @@ ackack () {
         $(python $_script "$@")
     fi
 }
+
+[[ -n $WELCOME_BYE ]] && echo Bye from $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f)
