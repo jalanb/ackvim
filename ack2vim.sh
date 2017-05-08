@@ -27,7 +27,7 @@ aa () {
 }
 
 ac () {
-    ack --code "$@"
+    ack --python \\s*class."$@"
 }
 
 ae () {
