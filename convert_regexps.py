@@ -1,6 +1,8 @@
 """Script to convert ack regexps to vim regexps"""
 
 
+from __future__ import print_function
+import os
 import re
 import sys
 import commands
@@ -49,9 +51,9 @@ def convert(strings):
     return escaped_strings
 
 
-def ack_help(help):
+def ack_help(help_):
     status, output = commands.getstatusoutput(
-        'PATH=/usr/local/bin:/usr/bin:/bin ack --%s' % help)
+        'PATH=/usr/local/bin:/usr/bin:/bin ack --%s' % help_)
     if status:
         raise ValueError(output)
     return [_[2:] for _ in output.splitlines() if _.startswith('  -')]
@@ -65,7 +67,7 @@ def ackrc_types():
 
 def ack_options():
     options = ack_help('help') + ack_help('help-types')
-    bare_options = [re.sub('\s\s+.*','', _).split(', ') for _ in options]
+    bare_options = [re.sub(r'\s\s+.*', '', _).split(', ') for _ in options]
     bare_option_list = [_ for _ in itertools.chain(*bare_options) if _ != '-?']
     bare_regexps = [_.replace('[no]', '(no)?') for _ in bare_option_list]
     bare_regexps.extend(ackrc_types())
@@ -108,10 +110,23 @@ def remove_ack_options(args):
     return args[:1] + remove_ack_options(args[1:])
 
 
+def remove_ack_arguments(args):
+    positionals = remove_ack_options(args)
+    if os.path.isdir(positionals[-1]):
+        return positionals[:-1]
+    return positionals
+
+
 def main(args):
-    non_ack_args = remove_ack_options(args)
+    non_ack_args = remove_ack_arguments(args)
+    try:
+        non_ack_args.remove('-j')
+    except ValueError:
+        joiner = ' '
+    else:
+        joiner = '.'
     converted = convert(non_ack_args)
-    print ' '.join(converted)
+    print(joiner.join(converted))
     return 0
 
 

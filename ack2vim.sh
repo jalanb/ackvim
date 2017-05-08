@@ -159,7 +159,9 @@ ackack () {
     if [[  $PYTHON_DEBUGGING == -U || $DEBUGGING == www ]]; then
         python $_script $PYTHON_DEBUGGING "$@"
     else
-        $(python $_script "$@")
+        local _option=-j
+        [[ $* =~ -j ]] && _option=
+        $(python $_script $_option "$@")
     fi
 }
 

@@ -1,5 +1,6 @@
 """Script to change -v for an ack command to vack"""
 
+from __future__ import print_function
 import os
 import re
 import sys
@@ -21,7 +22,7 @@ def assert_perl_script(path):
         #  I prefer string interpolation operator over format()
         raise NotImplementedError('"%s" is not a file' % path)
 
-    stem, ext = os.path.splitext(path)
+    _stem, ext = os.path.splitext(path)
     if ext == '.pl':
         return
     with open(path) as stream:
@@ -39,32 +40,56 @@ def which_ack():
     if not ack or not os.path.isfile(ack):
         status, output = commands.getstatusoutput('which ack')
         if status != os.EX_OK:
-            status, output = commands.getstatusoutput('PATH=/usr/local/bin:/usr/bin:/bin which ack')
+            status, output = commands.getstatusoutput(
+                'PATH=/usr/local/bin:/usr/bin:/bin which ack')
             if status != os.EX_OK:
                 raise NotImplementedError('"which ack" failed: "%s"' % output)
         ack = output
     assert_perl_script(ack)
     return ack
 
+
 def main(args):
     """Run this script as a program"""
     if '-U' in sys.argv:
         import pudb
         pudb.set_trace()
+    try:
+        args.remove('-j')
+    except ValueError:
+        dot_join = False
+    else:
+        dot_join = True
     words = [which_ack()]
+    sought_words = [] if dot_join else words
+    ignoring = False
     for word in args:
+        if word == '--ignore-dir':
+            words.append(word)
+            ignoring = True
+            continue
+        if ignoring:
+            words.append(word)
+            ignoring = False
+            continue
         if re.match('-[a-uw-z]*[vV][a-uw-z]*', word):
             words[0] = 'vack'
             words.append(word)
+        elif word.startswith('-'):
+            words.append(word)
         else:
-            if ' ' in word and re.search('[.(]', word):
+            if ' ' in word or re.search('[.(]', word):
                 if ' $' in word:
-                    words.append("'%s'" % word)
+                    sought_words.append("'%s'" % word)
                 else:
-                    words.append('"%s"' % word)
+                    sought_words.append(word.replace(' ', '.'))
             else:
-                words.append(word)
-    print ' '.join(words)
+                sought_words.append(word)
+    command = ' '.join(words)
+    if dot_join:
+        new_args = '.'.join(sought_words)
+        command = '%s %s' % (command, new_args)
+    print(command)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
