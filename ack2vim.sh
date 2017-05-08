@@ -19,7 +19,7 @@ a () {
 # xx
 
 aa () {
-    vack "$@"
+    aack "$@"
 }
 
 ac () {
@@ -54,21 +54,21 @@ at () {
 }
 
 av () {
-    vack "$@"
+    aack "$@"
 }
 
 # xxx
 
 aaa () {
-    vack --nojunk "$@"
+    aack --nojunk "$@"
 }
 
 aac () {
-    vack --code "$@"
+    aack --code "$@"
 }
 
 aae () {
-    vack --erl "$@"
+    aack --erl "$@"
 }
 
 aaf () {
@@ -76,8 +76,9 @@ aaf () {
 }
 
 aal () {
-    vack --html "$@"
+    aack --html "$@"
 }
+
 
 aap () {
     local _ignores=( /test /lib /__pycache__ )
@@ -85,11 +86,11 @@ aap () {
 }
 
 aat () {
-    vack --pyt "$@"
+    aack --pyt "$@"
 }
 
 aaw () {
-    vack -w "$@"
+    aack -w "$@"
 }
 
 aiw () {
@@ -103,7 +104,7 @@ ash () {
 
 ack () {
     if [[ $# -gt 0 && ${!#} =~ -v ]]; then
-        vack "${@/-v/}"
+        aack "${@/-v/}"
     else
         ackack "$@"
     fi
@@ -111,12 +112,13 @@ ack () {
 
 # xxxx
 
+unalias aaaa 2>/dev/null
 aaaa () {
-    vack --all "$@"
+    aack --all "$@"
 }
 
 aash () {
-    vack --shell "$@"
+    aack --shell "$@"
 }
 
 lack () {
@@ -128,7 +130,7 @@ convert_regexp () {
     python $VACK_DIR/convert_regexps.py "$@"
 }
 
-vack () {
+aack () {
     local _regexp=$(convert_regexp "$@")
     local _files=$(ackack -l "$@" | tr '\n' ' ')
     [[ -n $_files ]] && vim -p $_files +/$_regexp
