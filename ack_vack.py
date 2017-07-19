@@ -4,8 +4,8 @@ from __future__ import print_function
 import os
 import re
 import sys
-import commands
 
+from six.moves import getstatusoutput
 
 __version__ = '0.4.5'
 
@@ -38,9 +38,9 @@ def which_ack():
     """
     ack = os.environ.get('ACK') or 'ack'
     if not ack or not os.path.isfile(ack):
-        status, output = commands.getstatusoutput('which ack')
+        status, output = getstatusoutput('which ack')
         if status != os.EX_OK:
-            status, output = commands.getstatusoutput(
+            status, output = getstatusoutput(
                 'PATH=/usr/local/bin:/usr/bin:/bin which ack')
             if status != os.EX_OK:
                 raise NotImplementedError('"which ack" failed: "%s"' % output)

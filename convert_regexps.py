@@ -5,8 +5,9 @@ from __future__ import print_function
 import os
 import re
 import sys
-import commands
 import itertools
+
+from six.moves import getstatusoutput
 
 
 __version__ = '0.4.5'
@@ -52,7 +53,7 @@ def convert(strings):
 
 
 def ack_help(help_):
-    status, output = commands.getstatusoutput(
+    status, output = getstatusoutput(
         'PATH=/usr/local/bin:/usr/bin:/bin ack --%s' % help_)
     if status:
         raise ValueError(output)
