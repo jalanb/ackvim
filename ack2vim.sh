@@ -77,7 +77,7 @@ aae () {
 }
 
 aaf () {
-    vack --python \\s*def."$@"
+    aack --python \\s*def."$@"
 }
 
 aal () {
@@ -87,7 +87,7 @@ aal () {
 
 aap () {
     local _ignores=( /test /lib /__pycache__ )
-    vack ${_ignores[@]/#\// --ignore-dir } --python "$@"
+    aack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 aat () {
