@@ -49,7 +49,7 @@ al () {
 }
 
 ap () {
-    local _ignores=( /test /lib /__pycache__ )
+    local _ignores=( /test /tests /lib /__pycache__ )
     ack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
