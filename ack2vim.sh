@@ -151,7 +151,7 @@ clack () {
 # xxxxxx
 
 ackack () {
-    [[ $* =~ -l ]] || python -c "print '\n\033[0;36m%s\033[0m\n' % ('#' * $(tput cols))"
+    [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols)"))"
     local _script="$(dirname $(readlink -f $BASH_SOURCE))/ack_vack.py"
     local _paste=
     [[ $* == v || $1 == PASTE ]] && _paste=$(pbpaste)
