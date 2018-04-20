@@ -1,14 +1,14 @@
-# ack2vim
+# vimack
 
-ack2vim eases the interface beween [ack](http://beyondgrep.com/) and [vim](http://www.vim.org/), so that `ack`'s findings can be found with `vim` as well.
+vimack eases the interface beween [ack](http://beyondgrep.com/) and [vim](http://www.vim.org/), so that `ack`'s findings can be found with `vim` as well.
 
-It helps by running `ack` commands, gathering the results and using `vim` to edit any found files, and telling `vim` to search for similar strings to those `ack` sought. The strings `vim` searches for are "similar", not "the same", because the two commands use different regexp languages, so ack2vim converts the strings.
+It helps by running `ack` commands, gathering the results and using `vim` to edit any found files, and telling `vim` to search for similar strings to those `ack` sought. The strings `vim` searches for are "similar", not "the same", because the two commands use different regexp languages, so vimack converts the strings.
 
-ack2vim is useful at the [bash](https://www.gnu.org/software/bash/) command line, it is not used within `vim`.
+vimack is useful at the [bash](https://www.gnu.org/software/bash/) command line, it is not used within `vim`.
 
 ## Usage
 
-ack2vim allows lines in `bash` like
+vimack allows lines in `bash` like
 
 ```shell
 ap -w main -v
@@ -25,20 +25,20 @@ aai sys
 which searches all python files for any "import sys" or "from sys import", and vims those files with that search
 ## Install
 
-Clone the repository and source a file to add ack2vim's command into `bash`
+Clone the repository and source a file to add vimack's command into `bash`
 ```shell
-git clone https://github.com/jalanb/ack2vim.git
-source ack2vim/ack2vim.sh
+git clone https://github.com/jalanb/vimack.git
+source vimack/vimack.sh
 ```
 
-Merge ack2vim's ackrc file into `ack`'s config file in $HOME
+Merge vimack's ackrc file into `ack`'s config file in $HOME
 
 ```shell
-vim -d ack2vim/ackrc ~/.ackrc
+vim -d vimack/ackrc ~/.ackrc
 ```
 
 ## Options
-Because it needs to handle options for both `ack` and `vim`, ack2vim provides only one option itself. Rather it provides individual commands, such as the following which add filetype options to the `ack` command line
+Because it needs to handle options for both `ack` and `vim`, vimack provides only one option itself. Rather it provides individual commands, such as the following which add filetype options to the `ack` command line
 
 command | filetype
 --------|---------
@@ -49,9 +49,9 @@ command | filetype
    ap   |  --python
    at   |  --pyt
 
-(These filetypes are defined in the ackrc file [included in this repository](https://github.com/jalanb/ack2vim/blob/master/ackrc))
+(These filetypes are defined in the ackrc file [included in this repository](https://github.com/jalanb/vimack/blob/master/ackrc))
 
-Some commands add other options, e.g. `ai` searches in python files for imports only. [RTFS](https://github.com/jalanb/ack2vim/blob/master/ack2vim) for more commands
+Some commands add other options, e.g. `ai` searches in python files for imports only. [RTFS](https://github.com/jalanb/vimack/blob/master/vimack) for more commands
 
 Each `a...` command recognises one option `-v` which runs the `a...` command, and sends the results on to `vim`. And, for the convenience of those using `readline`'s [vi mode](http://tiswww.case.edu/php/chet/readline/rluserman.html#SEC22) at the command line, each also has an equivalent `aa...` alias.
 
@@ -83,12 +83,12 @@ al fred -v
 
 ## How does it work?
 
-ack2vim provides [bash functions with abbreviated names](https://github.com/jalanb/ack2vim/blob/master/ack2vim.sh#L15), all of which [eventually](https://github.com/jalanb/ack2vim/blob/master/ack2vim.sh#L149) hand over to [a python program](https://github.com/jalanb/ack2vim/blob/master/ack_vack.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
+vimack provides [bash functions with abbreviated names](https://github.com/jalanb/vimack/blob/master/vimack.sh#L15), all of which [eventually](https://github.com/jalanb/vimack/blob/master/vimack.sh#L149) hand over to [a python program](https://github.com/jalanb/vimack/blob/master/ack_vack.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
 
 ## Limitations
 
-* ack2vim only provides the commands I have needed - searching in shell, python, and web files. But they are very easy to extend
-* ack2vim needs to handle options from the shell command line for both `ack` and `vim`. The code which handles this is a "good enough" hack
+* vimack only provides the commands I have needed - searching in shell, python, and web files. But they are very easy to extend
+* vimack needs to handle options from the shell command line for both `ack` and `vim`. The code which handles this is a "good enough" hack
 
 ## Readers who got this far went on to view:
 
@@ -105,5 +105,5 @@ This code [WFM](http://www.urbandictionary.com/define.php?term=wfm) and I use it
 Who Doesn't Love Badges?
 ------------------------
 
-[![Build Status](https://travis-ci.org/jalanb/ack2vim.svg?branch=master)](https://travis-ci.org/jalanb/ack2vim)
-[![Test Coverage](https://codecov.io/gh/jalanb/ack2vim/branch/master/graph/badge.svg)](https://codecov.io/gh/jalanb/ack2vim)
+[![Build Status](https://travis-ci.org/jalanb/vimack.svg?branch=master)](https://travis-ci.org/jalanb/vimack)
+[![Test Coverage](https://codecov.io/gh/jalanb/vimack/branch/master/graph/badge.svg)](https://codecov.io/gh/jalanb/vimack)

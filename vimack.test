@@ -1,8 +1,8 @@
-The ack2vim module
+The vimack module
 ==================
 
-    >>> import ack2vim
-    >>> print ack2vim.__doc__
+    >>> import vimack
+    >>> print vimack.__doc__
     Script to integrate ack with vim
 
 
@@ -10,14 +10,14 @@ Removing options
 ----------------
 
 Do not take out a v option that is part a word
-    >>> ack2vim.remove_option("--python -w 'v[34][0-9]' -v", 'v')
+    >>> vimack.remove_option("--python -w 'v[34][0-9]' -v", 'v')
     ("--python -w 'v[34][0-9]' ", 'v')
 
 
 Do take it out from "-java"
-    >>> ack2vim.remove_option('-java -w hello -v', 'v')
+    >>> vimack.remove_option('-java -w hello -v', 'v')
     ('-jaa -w hello ', 'v')
 
 But not from "--java"
-    >>> ack2vim.remove_option('--java -w hello -v', 'v')
+    >>> vimack.remove_option('--java -w hello -v', 'v')
     ('--java -w hello ', 'v')

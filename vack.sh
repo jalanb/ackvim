@@ -1,5 +1,5 @@
 #! /bin/bash
 
-. $(dirname $BASH_SOURCE)/ack2vim.sh
+. $(dirname $BASH_SOURCE)/vimack.sh
 
 vack "$@"
