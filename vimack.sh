@@ -27,7 +27,7 @@ aa () {
 }
 
 ac () {
-    ack --python \\s*class."$@"
+    ack --python \\s*class."$@" --ignore-dir=tests
 }
 
 ae () {
@@ -35,13 +35,13 @@ ae () {
 }
 
 af () {
-    ack --python \\s*def."$@"
+    ack --python \\s*def\\s"$@" --ignore-dir=tests
 }
 
 ai () {
     local sought=$1
     shift
-    $(which ack) --pyt '(import.*'"$sought|$sought"'.*import)' "$@"
+    $(which ack) --python '(import.*'"$sought|$sought"'.*import)' "$@"
 }
 
 al () {
@@ -55,6 +55,10 @@ ap () {
 
 at () {
     ack --pyt "$@"
+}
+
+ay () {
+    ack --yaml "$@"
 }
 
 av () {
@@ -94,13 +98,23 @@ aat () {
     aack --pyt "$@"
 }
 
+aay () {
+    aack --yaml "$@"
+}
+
 aaw () {
     aack -w "$@"
 }
 
+aai () {
+    local _regexp=$(convert_regexp "$@")
+    local _files=$(ai "$@" -l| tr '\n' ' ')
+    vim -p $_files +/$_regexp
+}
+
 aiw () {
     local sought=$1
-    ack --pyt "(import.*\b$sought\b|\b$sought\b.import)"
+    ack --python "(import.*\b$sought\b|\b$sought\b.import)"
 }
 
 ash () {
