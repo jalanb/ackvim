@@ -7,7 +7,10 @@ import re
 import sys
 import itertools
 
-from six.moves import getstatusoutput
+try:
+    from subprocess import getoutput
+except ImportError:
+    from commands import getoutput
 
 
 __version__ = '0.4.5'
@@ -53,10 +56,8 @@ def convert(strings):
 
 
 def ack_help(help_):
-    status, output = getstatusoutput(
+    output = getoutput(
         'PATH=/usr/local/bin:/usr/bin:/bin ack --%s' % help_)
-    if status:
-        raise ValueError(output)
     return [_[2:] for _ in output.splitlines() if _.startswith('  -')]
 
 

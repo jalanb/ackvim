@@ -5,8 +5,6 @@ import os
 import re
 import sys
 
-from six.moves import getstatusoutput
-
 __version__ = '0.4.5'
 
 
@@ -36,15 +34,7 @@ def which_ack():
 
     Should be a perl script
     """
-    ack = os.environ.get('ACK') or 'ack'
-    if not ack or not os.path.isfile(ack):
-        status, output = getstatusoutput('which ack')
-        if status != os.EX_OK:
-            status, output = getstatusoutput(
-                'PATH=/usr/local/bin:/usr/bin:/bin which ack')
-            if status != os.EX_OK:
-                raise NotImplementedError('"which ack" failed: "%s"' % output)
-        ack = output
+    ack = os.environ.get('ACK') or '/usr/local/bin/ack'
     assert_perl_script(ack)
     return ack
 
