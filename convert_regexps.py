@@ -13,7 +13,7 @@ except ImportError:
     from commands import getoutput
 
 
-__version__ = '0.4.5'
+__version__ = '0.7.0'
 
 
 def bs_to_brackets(string):

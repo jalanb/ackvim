@@ -10,7 +10,7 @@ import commands
 from convert_regexps import convert
 
 
-__version__ = '0.4.5'
+__version__ = '0.7.0'
 
 
 class ShellError(Exception):
