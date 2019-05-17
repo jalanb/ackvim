@@ -111,6 +111,10 @@ aaw () {
     aack -w "$@"
 }
 
+aco () {
+    aack --code "$@"
+}
+
 aiw () {
     local sought=$1
     ack --python "(import.*\b$sought\b|\b$sought\b.import)"
