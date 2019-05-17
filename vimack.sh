@@ -155,7 +155,7 @@ convert_regexp () {
 aack () {
     local _regexp=$(convert_regexp "$@")
     local _files=$(ackack -l "$@" | tr '\n' ' ')
-    [[ -n $_files ]] && vim -p $_files +/$_regexp
+    [[ $_files ]] && vim -p $_files +/$_regexp
 }
 
 # xxxxx
@@ -169,16 +169,25 @@ clack () {
 
 ackack () {
     [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols)"))"
-    local _script="$(dirname $(readlink -f $BASH_SOURCE))/ack_vack.py"
+    local _script="$(readlink -f $BASH_SOURCE)"
+    local _dir="$(dirname $_script)"
+    local _script_py="$_dir/ack_vack.py"
+    if [[ ! -f $_script_py ]]; then
+        [[ -f $_script ]] || echo "$_script is not a file" >&2
+        [[ -d $_dir ]] || echo "$_dir is not a file" >&2
+        [[ -f $_script_py ]] || echo "$_script_py is not a file" >&2
+        /usr/local/bin/ack "$@"
+        return 1
+    fi
     local _paste=
     [[ $* == v || $1 == PASTE ]] && _paste=$(pbpaste)
     [[ $1 == PASTE ]] && shift
     if [[  $PYTHON_DEBUGGING == -U || $DEBUGGING == www ]]; then
-        python $_script $PYTHON_DEBUGGING "$@"
+        python $_script_py $PYTHON_DEBUGGING "$@"
     else
         local _option=-j
         [[ $* =~ -j ]] && _option=
-        $(python $_script $_option "$@")
+        $(python $_script_py $_option "$@")
     fi
 }
 
