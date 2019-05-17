@@ -27,7 +27,7 @@ aa () {
 }
 
 ac () {
-    ack --python \\s*class."$@" --ignore-dir=tests
+    _ack_class_def ack class "$@"
 }
 
 ae () {
@@ -35,7 +35,7 @@ ae () {
 }
 
 af () {
-    ack --python \\s*def\\s"$@" --ignore-dir=tests
+    _ack_class_def ack def "$@"
 }
 
 ai () {
@@ -73,7 +73,7 @@ aaa () {
 }
 
 aac () {
-    aack --code "$@"
+    _ack_class_def aack class "$@"
 }
 
 aae () {
@@ -176,6 +176,19 @@ ackack () {
         [[ $* =~ -j ]] && _option=
         $(python $_script $_option "$@")
     fi
+}
+
+_ack_class_def () {
+    local __doc__="""Search for a class/def definition"""
+    local _function=$1; shift
+    local _type=$1; shift
+    local _option=
+    local _sought="$@"
+    if [[ $_sought =~ -i ]]; then
+        _option=-i
+        _sought=${_sought/-i /}
+    fi
+    $_function $_option --python \\s*${_type}.'[^(]*'"$_sought" --ignore-dir=tests
 }
 
 [[ -n $WELCOME_BYE ]] && echo Bye from $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f)
