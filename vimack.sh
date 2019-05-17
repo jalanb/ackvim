@@ -81,13 +81,18 @@ aae () {
 }
 
 aaf () {
-    aack --python \\s*def."$@"
+    _ack_class_def aack def "$@"
 }
 
 aal () {
     aack --html "$@"
 }
 
+aai () {
+    local _regexp=$(convert_regexp "$@")
+    local _files=$(ai "$@" -l| tr '\n' ' ')
+    vim -p $_files +/$_regexp
+}
 
 aap () {
     local _ignores=( /test /lib /__pycache__ )
@@ -104,12 +109,6 @@ aay () {
 
 aaw () {
     aack -w "$@"
-}
-
-aai () {
-    local _regexp=$(convert_regexp "$@")
-    local _files=$(ai "$@" -l| tr '\n' ' ')
-    vim -p $_files +/$_regexp
 }
 
 aiw () {
