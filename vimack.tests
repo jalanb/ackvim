@@ -1,0 +1,20 @@
+The vimack module
+==================
+
+    >>> import vimack
+
+Removing options
+----------------
+
+    >>> remove_option = vimack.remove_option
+    >>> assert remove_option('arg -x ', 'x') == ('arg', True)
+    >>> assert remove_option('-x arg', 'x') == ('arg', True)
+    >>> assert remove_option('-x xrg', 'x') == ('xrg', True)
+    >>> assert remove_option('-xyz arg', 'x') == ('-yz arg', True)
+    >>> assert remove_option('-xyz arg', 'y') == ('-xz arg', True)
+    >>> assert remove_option('-xyz arg', 'z') == ('-xy arg', True)
+
+    >>> assert remove_option('xxx', 'x') == ('xxx', False)
+    >>> assert remove_option('-y arg', 'x') == ('-y arg', False)
+    >>> assert remove_option('-y xrg', 'x') == ('-y xrg', False)
+    >>> assert remove_option('--xyz arg', 'z') == ('--xyz arg', False)

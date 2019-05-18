@@ -1,10 +1,12 @@
 """Script to integrate ack with vim"""
 
-
 import os
 import re
 import sys
-import commands
+try:
+    from subprocess import getstatusoutput
+except ImportError:
+    from commands import getstatusoutput
 
 
 from convert_regexps import convert
@@ -52,7 +54,7 @@ def args_to_strings(args):
 
 
 def run_command_in_path(command):
-    return commands.getstatusoutput('%s %s' % ('PATH=/usr/local/bin:/usr/bin:/bin', command))
+    return getstatusoutput('%s %s' % ('PATH=/usr/local/bin:/usr/bin:/bin', command))
 
 
 def run_ack(args):
@@ -85,31 +87,18 @@ def worded(string):
 def remove_option(string, char):
     """Remove the given option char from the string
 
-    >>> remove_option('arg -x', 'x')
-    ('arg ', 'x')
-    >>> remove_option('arg -x ', 'x')
-    ('arg ', 'x')
-    >>> remove_option('-x arg', 'x')
-    ('arg', 'x')
-    >>> remove_option('-xyz arg', 'x')
-    ('-yz arg', 'x')
-    >>> remove_option('-y arg', 'x')
-    ('-y arg', '')
-    >>> remove_option('-y xrg', 'x')
-    ('-y xrg', '')
-    >>> remove_option('-x xrg', 'x')
-    ('xrg', 'x')
+    >>> assert remove_option('ls -la', 'l') == ('ls -a', True)
     """
     assert char
-    regexp = r'-%s(\W|$)' % char
-    result_string = re.sub(regexp, '', string)
-    regexp = r'-([a-z]*)%s([a-z]*)' % char
-    if re.search(regexp, result_string):
-        if not re.search('-%s' % regexp, result_string):
-            result_string = re.sub(regexp, r'-\1\2', result_string)
-    if result_string == string:
-        char = ''
-    return result_string, char
+    copy = string
+    regexp = r'(^|[^-])(-\w*%s\w*)' % char
+    for _, match in re.findall(regexp, string):
+        charless = match.replace(char, '')
+        replacement = '' if charless == '-' else charless
+        string = string.replace(match, replacement)
+    if copy == string:
+        return string, False
+    return string.strip(), True
 
 
 def as_vim_args(args):
@@ -146,13 +135,17 @@ def verbose_option():
     return 'V'
 
 
+def write_line(stream, string):
+    stream.write('%s\n' % string)
+
+
 def use_files(run_vim, args, paths_to_files):
     if run_vim:
         vim_command = as_a_vim_command(args, paths_to_files)
-        print vim_command
+        write_line(sys.stdout, vim_command)
         return os.EX_OK
     vim_commands = as_vim_commands(args, paths_to_files)
-    print '\n'.join(vim_commands)
+    write_line('\n'.join(vim_commands))
     return os.EX_TEMPFAIL
 
 
@@ -162,7 +155,7 @@ def parse_command_line(args):
     for arg in args:
         if arg[-1] == '/':
             continue
-        arg, _consumed = remove_option(arg, verbose_option())
+        arg, _ = remove_option(arg, verbose_option())
         if not arg:
             continue
         arg, run_vim = remove_option(arg, run_vim_option())
@@ -178,8 +171,8 @@ def main(args):
         paths_to_files = run_ack(args)
         _, args = as_vim_args(args)
         return use_files(run_vim, args, paths_to_files)
-    except ShellError, e:
-        print >> sys.stderr, e
+    except ShellError as e:
+        write_line(sys.stderr, '%s\n' % e)
         return e.status
     return os.EX_OK
 

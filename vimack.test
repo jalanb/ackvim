@@ -2,22 +2,20 @@ The vimack module
 ==================
 
     >>> import vimack
-    >>> print vimack.__doc__
-    Script to integrate ack with vim
-
+    >>> assert 'integrate ack with vim' in vimack.__doc__
 
 Removing options
 ----------------
 
-Do not take out a v option that is part a word
-    >>> vimack.remove_option("--python -w 'v[34][0-9]' -v", 'v')
-    ("--python -w 'v[34][0-9]' ", 'v')
+remove_option() takes out a given option from a command line
+    >>> line, removed = vimack.remove_option('--python -h', 'h')
+    >>> assert line == '--python'
+    >>> assert removed
 
+And removes them even within groups
+    >>> line, _ = vimack.remove_option('-o --python -goi', 'o')
+    >>> assert line == '--python -gi'
 
-Do take it out from "-java"
-    >>> vimack.remove_option('-java -w hello -v', 'v')
-    ('-jaa -w hello ', 'v')
-
-But not from "--java"
-    >>> vimack.remove_option('--java -w hello -v', 'v')
-    ('--java -w hello ', 'v')
+Do not take out an option that is part a word
+    >>> line, _ = vimack.remove_option("--java -w 'v[34][0-9]' -v", 'v')
+    >>> assert line == "--java -w 'v[34][0-9]'"
