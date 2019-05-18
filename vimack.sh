@@ -11,81 +11,82 @@ then
     echo "  sh $0"
 fi
 
+# File organisation: Functions are sorted by length of name first, then alphabetically
 
 # x
 
 unalias a 2>/dev/null
 a () {
-    ack "$@"
+    choose_ack "$@"
 }
 
 # xx
 
 unalias aa 2>/dev/null
 aa () {
-    aack "$@"
+    ack_then_vim "$@"
 }
 
 ac () {
-    _ack_class_def ack class "$@"
+    _ack_class_def choose_ack class "$@"
 }
 
 ae () {
-    ack --erl "$@"
+    choose_ack --erl "$@"
 }
 
 af () {
-    _ack_class_def ack def "$@"
+    _ack_class_def choose_ack def "$@"
 }
 
 ai () {
     local sought=$1
     shift
-    $(which ack) --python '(import.*'"$sought|$sought"'.*import)' "$@"
+    ack --python '(import.*'"$sought|$sought"'.*import)' "$@"
 }
 
 al () {
-    ack --html "$@"
+    choose_ack --html "$@"
 }
 
 ap () {
     local _ignores=( /test /tests /lib /__pycache__ )
-    ack ${_ignores[@]/#\// --ignore-dir } --python "$@"
+    choose_ack ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 at () {
-    ack --pyt "$@"
+    choose_ack --pyt "$@"
 }
 
 ay () {
-    ack --yaml "$@"
+    choose_ack --yaml "$@"
 }
 
 av () {
-    aack "$@"
+    ack_then_vim "$@"
 }
 
 # xxx
 
 unalias aaa 2>/dev/null
 aaa () {
-    aack --nojunk "$@"
+    ack_then_vim --nojunk "$@"
 }
 
 aac () {
-    _ack_class_def aack class "$@"
+    _ack_class_def ack_then_vim class "$@"
 }
 
 aae () {
-    aack --erl "$@"
+    ack_then_vim --erl "$@"
 }
 
 aaf () {
-    _ack_class_def aack def "$@"
+    _ack_class_def ack_then_vim def "$@"
 }
 
 aal () {
-    aack --html "$@"
+    ack_then_vim --html "$@"
 }
 
 aai () {
@@ -96,23 +97,23 @@ aai () {
 
 aap () {
     local _ignores=( /test /lib /__pycache__ )
-    aack ${_ignores[@]/#\// --ignore-dir } --python "$@"
+    ack_then_vim ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 aat () {
-    aack --pyt "$@"
+    ack_then_vim --pyt "$@"
 }
 
 aay () {
-    aack --yaml "$@"
+    ack_then_vim --yaml "$@"
 }
 
 aaw () {
-    aack -w "$@"
+    ack_then_vim -w "$@"
 }
 
 aco () {
-    aack --code "$@"
+    ack_then_vim --code "$@"
 }
 
 aiw () {
@@ -121,30 +122,22 @@ aiw () {
 }
 
 ash () {
-    ack --shell "$@"
-}
-
-ack () {
-    if [[ $# -gt 0 && ${!#} =~ -v ]]; then
-        aack "${@/-v/}"
-    else
-        ackack "$@"
-    fi
+    choose_ack --shell "$@"
 }
 
 # xxxx
 
 unalias aaaa 2>/dev/null
 aaaa () {
-    aack --all "$@"
+    ack_then_vim --all "$@"
 }
 
 aash () {
-    aack --shell "$@"
+    ack_then_vim --shell "$@"
 }
 
 lack () {
-    ackack -l "$@"
+    choose_ack -l "$@"
 }
 
 convert_regexp () {
@@ -152,47 +145,51 @@ convert_regexp () {
     python $VACK_DIR/convert_regexps.py "$@"
 }
 
-aack () {
-    local _regexp=$(convert_regexp "$@")
-    local _files=$(ackack -l "$@" | tr '\n' ' ')
-    [[ $_files ]] && vim -p $_files +/$_regexp
-}
-
 # xxxxx
 
 clack () {
     clear
-    ack "$@"
+    choose_ack "$@"
 }
 
-# xxxxxx
+# xxxxxx+
 
-ackack () {
+ack_args () {
+    local __doc__="Interpret args, search with ack"
     [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols)"))"
     local _script="$(readlink -f $BASH_SOURCE)"
     local _dir="$(dirname $_script)"
-    local _script_py="$_dir/ack_vack.py"
+    local _script_py="$_dir/ack_args.py"
     if [[ ! -f $_script_py ]]; then
         [[ -f $_script ]] || echo "$_script is not a file" >&2
         [[ -d $_dir ]] || echo "$_dir is not a file" >&2
         [[ -f $_script_py ]] || echo "$_script_py is not a file" >&2
-        /usr/local/bin/ack "$@"
+        ack "$@"
         return 1
     fi
-    local _paste=
-    [[ $* == v || $1 == PASTE ]] && _paste=$(pbpaste)
-    [[ $1 == PASTE ]] && shift
-    if [[  $PYTHON_DEBUGGING == -U || $DEBUGGING == www ]]; then
-        python $_script_py $PYTHON_DEBUGGING "$@"
+    local _option=-j
+    [[ $* =~ -j ]] && _option=
+    $(python $_script_py $_option "$@")
+}
+
+choose_ack () {
+    local __doc__="Choose which ack-function to run"
+    if [[ $# -gt 0 && ${!#} =~ -v ]]; then
+        ack_then_vim "${@/-v/}"
     else
-        local _option=-j
-        [[ $* =~ -j ]] && _option=
-        $(python $_script_py $_option "$@")
+        ack_args "$@"
     fi
 }
 
+ack_then_vim () {
+    local __doc__="Search for args with ack, edit results with vim"
+    local _regexp=$(convert_regexp "$@")
+    local _files=$(ack_args -l "$@" | tr '\n' ' ')
+    [[ $_files ]] && vim -p $_files +/$_regexp
+}
+
 _ack_class_def () {
-    local __doc__="""Search for a class/def definition"""
+    local __doc__="""Search for a class/def definition in python files"""
     local _function=$1; shift
     local _type=$1; shift
     local _option=

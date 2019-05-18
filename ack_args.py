@@ -1,4 +1,4 @@
-"""Script to change -v for an ack command to vack"""
+"""Handle options and regexps between ack and vim"""
 
 from __future__ import print_function
 import os
@@ -17,7 +17,6 @@ def assert_perl_script(path):
         2.b. mentions 'perl' in first line
     """
     if not os.path.isfile(path):
-        #  I prefer string interpolation operator over format()
         raise NotImplementedError('"%s" is not a file' % path)
 
     _stem, ext = os.path.splitext(path)
