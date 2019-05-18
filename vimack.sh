@@ -1,6 +1,6 @@
 #! /bin/cat
 
-[[ -n $WELCOME_BYE ]] && echo Welcome to $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f)
+[[ -n $WELCOME_BYE ]] && echo Welcome to $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f) || true
 
 # This script is intended to be sourced, not run
 if [[ $0 == $BASH_SOURCE ]]
@@ -15,14 +15,14 @@ fi
 
 # x
 
-unalias a 2>/dev/null
+unalias a 2>/dev/null || true
 a () {
     choose_ack "$@"
 }
 
 # xx
 
-unalias aa 2>/dev/null
+unalias aa 2>/dev/null || true
 aa () {
     ack_then_vim "$@"
 }
@@ -68,7 +68,7 @@ av () {
 
 # xxx
 
-unalias aaa 2>/dev/null
+unalias aaa 2>/dev/null || true
 aaa () {
     ack_then_vim --nojunk "$@"
 }
@@ -127,7 +127,7 @@ ash () {
 
 # xxxx
 
-unalias aaaa 2>/dev/null
+unalias aaaa 2>/dev/null || true
 aaaa () {
     ack_then_vim --all "$@"
 }
@@ -156,7 +156,7 @@ clack () {
 
 ack_args () {
     local __doc__="Interpret args, search with ack"
-    [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols)"))"
+    [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols 2>/dev/null || echo 0)"))"
     local _script="$(readlink -f $BASH_SOURCE)"
     local _dir="$(dirname $_script)"
     local _script_py="$_dir/ack_args.py"
@@ -201,4 +201,4 @@ _ack_class_def () {
     $_function $_option --python \\s*${_type}.'[^(]*'"$_sought" --ignore-dir=tests
 }
 
-[[ -n $WELCOME_BYE ]] && echo Bye from $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f)
+[[ -n $WELCOME_BYE ]] && echo Bye from $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f) || true
