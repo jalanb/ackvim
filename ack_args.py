@@ -5,7 +5,7 @@ import os
 import re
 import sys
 
-__version__ = '0.7.0'
+__version__ = '0.7.1'
 
 
 def assert_perl_script(path):
