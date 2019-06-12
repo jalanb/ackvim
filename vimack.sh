@@ -39,6 +39,10 @@ af () {
     _ack_class_def choose_ack def "$@"
 }
 
+ah () {
+    ack --html "$@"
+}
+
 ai () {
     local sought=$1
     shift
