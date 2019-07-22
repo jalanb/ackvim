@@ -8,6 +8,7 @@ install: pip install pytest
 script: py.test --doctest-modules --doctest-glob=*.test --doctest-glob=*.tests
 notifications:
   email: false
+  slack: jalanb:wqEssxDWp8j7FAaeNoOxz0z6#travis
 deploy:
   provider: pypi
   user: jalanb
