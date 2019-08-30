@@ -3,7 +3,7 @@
 set -e # fail for any reason
 
 _here=$(dirname $BASH_SOURCE)
-source $_here/vimack.sh
+source $_here/ackvim.sh
 
 run_tests () {
     a source

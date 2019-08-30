@@ -36,7 +36,7 @@ ae () {
 }
 
 af () {
-    _ack_class_def choose_ack def "$@"
+    _ack_class_def choose_ack -l def "$@"
 }
 
 ah () {
@@ -44,9 +44,11 @@ ah () {
 }
 
 ai () {
-    local sought=$1
-    shift
-    ack --python '(import.*'"$sought|$sought"'.*import)' "$@"
+    local _options=--python
+    [[ $1 == "-t" ]] && _options=--test && shift
+    [[ $1 == "-T" ]] && _options=--pyt && shift
+    local sought=$1; shift
+    ack $_options '(import.*'"$sought|$sought"'.*import)' "$@"
 }
 
 al () {
@@ -198,11 +200,16 @@ _ack_class_def () {
     local _type=$1; shift
     local _option=
     local _sought="$@"
-    if [[ $_sought =~ -i ]]; then
+    if has_option i $_sought; then
         _option=-i
-        _sought=${_sought/-i /}
+        _sought=$(remove_option i $_sought)
     fi
-    $_function $_option --python \\s*${_type}.'[^(]*'"$_sought" --ignore-dir=tests
+    local _regexp=\\s*${_type}.'[^(]*'"$_sought"
+    $_function $_option --python $_regexp --ignore-dir=tests && return 0
+    _regexp=$_sought
+    [[ $_type == "class" ]] && return 1
+    [[ $_type == "def" ]] && _regexp="^$_sought ()"
+    $_function $_option --shell $_regexp
 }
 
 [[ -n $WELCOME_BYE ]] && echo Bye from $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f) || true

@@ -1,21 +1,21 @@
-The vimack module
+The ackvim module
 ==================
 
-    >>> import vimack
-    >>> assert 'integrate ack with vim' in vimack.__doc__
+    >>> import ackvim
+    >>> assert 'integrate ack with vim' in ackvim.__doc__
 
 Removing options
 ----------------
 
 remove_option() takes out a given option from a command line
-    >>> line, removed = vimack.remove_option('--python -h', 'h')
+    >>> line, removed = ackvim.remove_option('--python -h', 'h')
     >>> assert line == '--python'
     >>> assert removed
 
 And removes them even within groups
-    >>> line, _ = vimack.remove_option('-o --python -goi', 'o')
+    >>> line, _ = ackvim.remove_option('-o --python -goi', 'o')
     >>> assert line == '--python -gi'
 
 Do not take out an option that is part a word
-    >>> line, _ = vimack.remove_option("--java -w 'v[34][0-9]' -v", 'v')
+    >>> line, _ = ackvim.remove_option("--java -w 'v[34][0-9]' -v", 'v')
     >>> assert line == "--java -w 'v[34][0-9]'"

@@ -1,12 +1,12 @@
-The vimack module
+The ackvim module
 ==================
 
-    >>> import vimack
+    >>> import ackvim
 
 Removing options
 ----------------
 
-    >>> remove_option = vimack.remove_option
+    >>> remove_option = ackvim.remove_option
     >>> assert remove_option('arg -x ', 'x') == ('arg', True)
     >>> assert remove_option('-x arg', 'x') == ('arg', True)
     >>> assert remove_option('-x xrg', 'x') == ('xrg', True)
