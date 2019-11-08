@@ -17,26 +17,26 @@ fi
 
 unalias a 2>/dev/null || true
 a () {
-    choose_ack "$@"
+    ack_find "$@"
 }
 
 # xx
 
 unalias aa 2>/dev/null || true
 aa () {
-    ack_then_vim "$@"
+    run_ack_vim "$@"
 }
 
 ac () {
-    _ack_class_def choose_ack class "$@"
+    ast_find ack_find class "$@"
 }
 
 ae () {
-    choose_ack --erl "$@"
+    ack_find --erl "$@"
 }
 
 af () {
-    _ack_class_def choose_ack -l def "$@"
+    ast_find ack_find def "$@"
 }
 
 ah () {
@@ -52,47 +52,47 @@ ai () {
 }
 
 al () {
-    choose_ack --html "$@"
+    ack_find --html "$@"
 }
 
 ap () {
     local _ignores=( /test /tests /lib /__pycache__ )
-    choose_ack ${_ignores[@]/#\// --ignore-dir } --python "$@"
+    ack_find ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 at () {
-    choose_ack --pyt "$@"
+    ack_find --pyt "$@"
 }
 
 ay () {
-    choose_ack --yaml "$@"
+    ack_find --yaml "$@"
 }
 
 av () {
-    ack_then_vim "$@"
+    run_ack_vim "$@"
 }
 
 # xxx
 
 unalias aaa 2>/dev/null || true
 aaa () {
-    ack_then_vim --nojunk "$@"
+    run_ack_vim --nojunk "$@"
 }
 
 aac () {
-    _ack_class_def ack_then_vim class "$@"
+    ast_find run_ack_vim class "$@"
 }
 
 aae () {
-    ack_then_vim --erl "$@"
+    run_ack_vim --erl "$@"
 }
 
 aaf () {
-    _ack_class_def ack_then_vim def "$@"
+    ast_find run_ack_vim def "$@"
 }
 
 aal () {
-    ack_then_vim --html "$@"
+    run_ack_vim --html "$@"
 }
 
 aai () {
@@ -103,23 +103,23 @@ aai () {
 
 aap () {
     local _ignores=( /test /lib /__pycache__ )
-    ack_then_vim ${_ignores[@]/#\// --ignore-dir } --python "$@"
+    run_ack_vim ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 aat () {
-    ack_then_vim --pyt "$@"
+    run_ack_vim --pyt "$@"
 }
 
 aay () {
-    ack_then_vim --yaml "$@"
+    run_ack_vim --yaml "$@"
 }
 
 aaw () {
-    ack_then_vim -w "$@"
+    run_ack_vim -w "$@"
 }
 
 aco () {
-    ack_then_vim --code "$@"
+    run_ack_vim --code "$@"
 }
 
 aiw () {
@@ -128,22 +128,22 @@ aiw () {
 }
 
 ash () {
-    choose_ack --shell "$@"
+    ack_find --shell "$@"
 }
 
 # xxxx
 
 unalias aaaa 2>/dev/null || true
 aaaa () {
-    ack_then_vim --all "$@"
+    run_ack_vim --all "$@"
 }
 
 aash () {
-    ack_then_vim --shell "$@"
+    run_ack_vim --shell "$@"
 }
 
 lack () {
-    choose_ack -l "$@"
+    ack_find -l "$@"
 }
 
 convert_regexp () {
@@ -155,20 +155,20 @@ convert_regexp () {
 
 clack () {
     clear
-    choose_ack "$@"
+    ack_find "$@"
 }
 
 # xxxxxx+
 
-ack_args () {
+run_ack_with () {
     local __doc__="Interpret args, search with ack"
     [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols 2>/dev/null || echo 0)"))"
     local _script="$(readlink -f $BASH_SOURCE)"
     local _dir="$(dirname $_script)"
-    local _script_py="$_dir/ack_args.py"
+    local _script_py="$_dir/run_ack_with.py"
     if [[ ! -f $_script_py ]]; then
         [[ -f $_script ]] || echo "$_script is not a file" >&2
-        [[ -d $_dir ]] || echo "$_dir is not a file" >&2
+        [[ -d $_dir ]] || echo "$_dir is not a directory" >&2
         [[ -f $_script_py ]] || echo "$_script_py is not a file" >&2
         ack "$@"
         return 1
@@ -178,23 +178,23 @@ ack_args () {
     $(python $_script_py $_option "$@")
 }
 
-choose_ack () {
+ack_find () {
     local __doc__="Choose which ack-function to run"
     if [[ $# -gt 0 && ${!#} =~ -v ]]; then
-        ack_then_vim "${@/-v/}"
+        run_ack_vim "${@/-v/}"
     else
-        ack_args "$@"
+        run_ack_with "$@"
     fi
 }
 
-ack_then_vim () {
+run_ack_vim () {
     local __doc__="Search for args with ack, edit results with vim"
     local _regexp=$(convert_regexp "$@")
-    local _files=$(ack_args -l "$@" | tr '\n' ' ')
+    local _files=$(run_ack_with -l "$@" | tr '\n' ' ')
     [[ $_files ]] && vim -p $_files +/$_regexp
 }
 
-_ack_class_def () {
+ast_find () {
     local __doc__="""Search for a class/def definition in python files"""
     local _function=$1; shift
     local _type=$1; shift
