@@ -1,6 +1,5 @@
 #! /bin/cat
 
-[[ -n $WELCOME_BYE ]] && echo Welcome to $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f) || true
 
 # This script is intended to be sourced, not run
 if [[ $0 == $BASH_SOURCE ]]
@@ -212,4 +211,3 @@ ast_find () {
     $_function $_option --shell $_regexp
 }
 
-[[ -n $WELCOME_BYE ]] && echo Bye from $(basename "$BASH_SOURCE") in $(dirname $(readlink -f "$BASH_SOURCE")) on $(hostname -f) || true
