@@ -29,7 +29,7 @@ def assert_perl_script(path):
 
 
 def which_ack():
-    """Find the system 'ack' with which
+    """Find the system 'ack' in shell's environemnt, or with which
 
     Should be a perl script
     """
@@ -38,46 +38,56 @@ def which_ack():
     return ack
 
 
+
+def ack_command(joiner, arguments, no_follow_option):
+    args = joiner.join([f"'{_}'" for _ in arguments])
+    ack = which_ack()
+    follow = '' if no_follow_option else '--follow'
+    return f'{ack} {args}'
+
+
+def had_option(args, option):
+    try:
+        args.remove(option)
+        return True
+    except ValueError:
+        return False
+
+
 def main(args):
     """Run this script as a program"""
-    if '-U' in sys.argv:
-        import pudb
-        pudb.set_trace()
-    try:
-        args.remove('-j')
-    except ValueError:
-        dot_join = False
-    else:
-        dot_join = True
-    words = [which_ack()]
-    sought_words = [] if dot_join else words
+    strings = []
+    regexps = []
+    join_option = had_option(args, '-j')
+    no_follow_option = not had_option(args, '-f')
     ignoring = False
     for word in args:
         if word == '--ignore-dir':
-            words.append(word)
+            strings.append(word)
             ignoring = True
             continue
         if ignoring:
-            words.append(word)
+            strings.append(word)
             ignoring = False
             continue
         if re.match('-[a-uw-z]*[vV][a-uw-z]*', word):
-            words[0] = 'vack'
-            words.append(word)
+            strings[0] = 'vack'
+            strings.append(word)
         elif word.startswith('-'):
-            words.append(word)
+            strings.append(word)
         else:
             if ' ' in word or re.search('[.(]', word):
                 if ' $' in word:
-                    sought_words.append("'%s'" % word)
+                    regexps.append("'%s'" % word)
                 else:
-                    sought_words.append(word.replace(' ', '.'))
+                    regexps.append(word.replace(' ', '.'))
             else:
-                sought_words.append(word)
-    command = ' '.join(words)
-    if dot_join:
-        new_args = '.'.join(sought_words)
-        command = '%s %s' % (command, new_args)
+                regexps.append(word)
+    command = ack_command(
+        '.' if join_option else ' ',
+        regexps if join_option else strings,
+        no_follow_option,
+    )
     print(command)
 
 if __name__ == '__main__':
