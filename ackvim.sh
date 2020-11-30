@@ -1,6 +1,5 @@
 #! /bin/cat
 
-
 # This script is intended to be sourced, not run
 if [[ $0 == $BASH_SOURCE ]]
 then
@@ -65,10 +64,6 @@ at () {
 
 ay () {
     ack_find --yaml "$@"
-}
-
-av () {
-    run_ack_vim "$@"
 }
 
 # xxx
@@ -210,4 +205,3 @@ ast_find () {
     [[ $_type == "def" ]] && _regexp="^$_sought ()"
     $_function $_option --shell $_regexp
 }
-

@@ -1,7 +1,6 @@
 """Script to convert ack regexps to vim regexps"""
 
 
-from __future__ import print_function
 import os
 import re
 import sys
