@@ -50,16 +50,16 @@ def args_to_strings(args):
     return join_args(options), join_quoted_args(args)
 
 
-def run_command_in_path(command):
+def run_command_in_usr_bins(command):
     return getstatusoutput('%s %s' % ('PATH=/usr/local/bin:/usr/bin:/bin', command))
 
 
 def run_ack(args):
-    status, output = run_command_in_path('which ack')
+    status, output = run_command_in_usr_bins('which ack')
     ack = status and 'ack' or output
     ack_command = '%s --files-with-matches --nocolor %%s %%s' % ack
     command = ack_command % (args_to_strings(args))
-    status, output = run_command_in_path(command)
+    status, output = run_command_in_usr_bins(command)
     if status:
         raise ShellError(status, output)
     return output.splitlines()
@@ -100,13 +100,14 @@ def remove_option(string, char):
 
 def as_vim_args(args):
     """Convert ack args to vim args"""
-    args = convert(args)
-    options, args = parse_args(args)
+    converted = convert(args)
+    options, parsed_args = parse_args(converted)
     option_string = join_args(options)
-    if 'w' in option_string:
-        args = [worded(arg) for arg in args]
-        option_string, _ = remove_option(option_string, 'w')
-    return option_string, join_quoted_args(args)
+    if 'w' not in option_string:
+        return option_string, join_quoted_args(parsed_args)
+    vim_args = [worded(arg) for arg in parsed_args]
+    option_string, _ = remove_option(option_string, 'w')
+    return option_string, join_quoted_args(vim_args)
 
 
 def as_vim_command(vim_args, path_to_file):
