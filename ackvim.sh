@@ -45,6 +45,7 @@ ai () {
     local _options=--python
     [[ $1 == "-t" ]] && _options=--test && shift
     [[ $1 == "-T" ]] && _options=--pyt && shift
+    [[ $1 == "-l" ]] && _options="$_options --files-with-matches" && shift
     local sought=$1; shift
     ack $_options '(import.*'"$sought|$sought"'.*import)' "$@"
 }
