@@ -75,7 +75,7 @@ def main(args):
             strings[0] = 'vack'
             strings.append(word)
         elif word.startswith('-'):
-            words.append(word)
+            strings.append(word)
         elif os.path.isdir(word):
             final_dir = word
         else:

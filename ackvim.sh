@@ -67,6 +67,10 @@ ay () {
     ack_find --yaml "$@"
 }
 
+av () {
+    run_ack_vim "$@"
+}
+
 # xxx
 
 unalias aaa 2>/dev/null || true
