@@ -1,14 +1,14 @@
 # ackvim
 
-ackvim eases the interface beween [ack](http://beyondgrep.com/) and [vim](http://www.vim.org/), so that `ack`'s findings can be found with `vim` as well.
+`ackvim` eases the interface beween [ack](http://beyondgrep.com/) and [vim](http://www.vim.org/), so that `ack`'s findings can be found with `vim` as well.
 
-It helps by running `ack` commands, gathering the results and using `vim` to edit any found files, and telling `vim` to search for similar strings to those `ack` sought. The strings `vim` searches for are "similar", not "the same", because the two commands use different regexp languages, so ackvim converts the strings.
+It helps by running `ack` commands, gathering the results and using `vim` to edit any found files, and telling `vim` to search for similar strings to those `ack` sought. The strings `vim` searches for are "similar", not "the same", because the two commands use different regexp languages, so `ackvim` converts the strings.
 
-ackvim is useful at the [bash](https://www.gnu.org/software/bash/) command line, it is not used within `vim`.
+`ackvim` is useful at the [bash](https://www.gnu.org/software/bash/) command line, it is not used within `vim`.
 
 ## Usage
 
-ackvim allows lines in `bash` like
+`ackvim` allows lines in `bash` like
 
 ```shell
 ap -w main -v
@@ -25,20 +25,20 @@ aai sys
 which searches all python files for any "import sys" or "from sys import", and vims those files with that search
 ## Install
 
-Clone the repository and source a file to add ackvim's command into `bash`
+Clone the repository and source a file to add `ackvim`'s command into `bash`
 ```shell
 git clone https://github.com/jalanb/ackvim.git
 source ackvim/ackvim.sh
 ```
 
-Merge ackvim's ackrc file into `ack`'s config file in $HOME
+Merge `ackvim`'s ackrc file into `ack`'s config file in $HOME
 
 ```shell
 vim -d ackvim/ackrc ~/.ackrc
 ```
 
 ## Options
-Because it needs to handle options for both `ack` and `vim`, ackvim provides only one option itself. Rather it provides individual commands, such as the following which add filetype options to the `ack` command line
+Because it needs to handle options for both `ack` and `vim`, `ackvim` provides only one option itself. Rather it provides individual commands, such as the following which add filetype options to the `ack` command line
 
 command | filetype
 --------|---------
@@ -83,12 +83,12 @@ al fred -v
 
 ## How does it work?
 
-ackvim provides [bash functions with abbreviated names](https://github.com/jalanb/vimack/blob/master/vimack.sh#L15), all of which [eventually](https://github.com/jalanb/vimack/blob/master/vimack.sh#L149) hand over to [a python program](https://github.com/jalanb/vimack/blob/master/ack_vack.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
+`ackvim` provides [bash functions with abbreviated names](https://github.com/jalanb/vimack/blob/master/vimack.sh#L15), all of which [eventually](https://github.com/jalanb/vimack/blob/master/vimack.sh#L149) hand over to [a python program](https://github.com/jalanb/vimack/blob/master/ack_vack.py) which interprets arguments, and does some conversion of `ack` to `vim` regexps, before sending the correct `vim` command to stdout. Bash captures that and runs it.
 
 ## Limitations
 
-* ackvim only provides the commands I have needed - searching in shell, python, and web files. But they are very easy to extend
-* ackvim needs to handle options from the shell command line for both `ack` and `vim`. The code which handles this is a "good enough" hack
+* `ackvim` only provides the commands I have needed - searching in shell, python, and web files. But they are very easy to extend
+* `ackvim` needs to handle options from the shell command line for both `ack` and `vim`. The code which handles this is a "good enough" hack
 
 ## Readers who got this far went on to view:
 
