@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 """Script to convert ack regexps to vim regexps"""
 
 
@@ -5,14 +6,7 @@ import os
 import re
 import sys
 import itertools
-
-try:
-    from subprocess import getoutput
-except ImportError:
-    from commands import getoutput
-
-
-__version__ = '0.7.3'
+from subprocess import getoutput
 
 
 def bs_to_brackets(string):

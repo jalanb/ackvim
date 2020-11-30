@@ -1,13 +1,10 @@
+#! /usr/bin/env python3
 """Script to integrate ack with vim"""
 
 import os
 import re
 import sys
-try:
-    from subprocess import getstatusoutput
-except ImportError:
-    from commands import getstatusoutput
-
+from subprocess import getstatusoutput
 
 from convert_regexps import convert
 
