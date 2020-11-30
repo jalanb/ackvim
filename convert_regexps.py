@@ -37,7 +37,7 @@ def escape_alternates(string):
     try:
         string = re.match(r'\((.*)\)', string).group(1)
         string = string.replace('|', r'\|')
-        return r'\(%s\)' % string
+        return r'\(%s\)' % string if string else '()'
     except AttributeError:
         return string
 
@@ -114,13 +114,16 @@ def remove_ack_arguments(args):
 
 def main(args):
     non_ack_args = remove_ack_arguments(args)
+    my_args = non_ack_args
     try:
         non_ack_args.remove('-j')
     except ValueError:
         joiner = ' '
+        if len(non_ack_args) == 1:
+            my_args = non_ack_args[0].split()
     else:
         joiner = '.'
-    converted = convert(non_ack_args)
+    converted = convert(my_args)
     print(joiner.join(converted))
     return 0
 

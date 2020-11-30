@@ -61,6 +61,7 @@ def main(args):
     join_option = had_option(args, '-j')
     no_follow_option = not had_option(args, '-f')
     ignoring = False
+    final_dir = ''
     for word in args:
         if word == '--ignore-dir':
             strings.append(word)
@@ -74,7 +75,9 @@ def main(args):
             strings[0] = 'vack'
             strings.append(word)
         elif word.startswith('-'):
-            strings.append(word)
+            words.append(word)
+        elif os.path.isdir(word):
+            final_dir = word
         else:
             if ' ' in word or re.search('[.(]', word):
                 if ' $' in word:
@@ -88,7 +91,7 @@ def main(args):
         regexps if join_option else strings,
         no_follow_option,
     )
-    print(command)
+    print(command, final_dir)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
