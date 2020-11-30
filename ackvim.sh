@@ -92,7 +92,7 @@ aal () {
 aai () {
     local _regexp=$(convert_regexp "$@")
     local _files=$(ai "$@" -l| tr '\n' ' ')
-    vim -p $_files +/$_regexp
+    vim -p $_files +/"$_regexp"
 }
 
 aap () {
@@ -185,7 +185,7 @@ run_ack_vim () {
     local __doc__="Search for args with ack, edit results with vim"
     local _regexp=$(convert_regexp "$@")
     local _files=$(run_ack_with -l "$@" | tr '\n' ' ')
-    [[ $_files ]] && vim -p $_files +/$_regexp
+    [[ $_files ]] && vim -p $_files +/"$_regexp"
 }
 
 ast_find () {
