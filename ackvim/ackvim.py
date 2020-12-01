@@ -1,18 +1,12 @@
+#! /usr/bin/env python3
 """Script to integrate ack with vim"""
 
 import os
 import re
 import sys
-try:
-    from subprocess import getstatusoutput
-except ImportError:
-    from commands import getstatusoutput
+from subprocess import getstatusoutput
 
-
-from convert_regexps import convert
-
-
-__version__ = '0.7.3'
+from .convert_regexps import convert
 
 
 class ShellError(Exception):
@@ -22,13 +16,13 @@ class ShellError(Exception):
 
 
 def join_args(args):
-    return ' '.join(args)
+    return " ".join(args)
 
 
 def quote_arg(arg):
     if '"' in arg:
         if "'" in arg:
-            raise ValueError('Cannot quote [%s]' % arg)
+            raise ValueError("Cannot quote [%s]" % arg)
         else:
             return "'%s'" % arg
     return '"%s"' % arg
@@ -37,7 +31,7 @@ def quote_arg(arg):
 def parse_args(args):
     options, result = [], []
     for arg in args:
-        if arg[0] == '-':
+        if arg[0] == "-":
             options.append(arg)
         else:
             result.append(arg)
@@ -53,16 +47,18 @@ def args_to_strings(args):
     return join_args(options), join_quoted_args(args)
 
 
-def run_command_in_path(command):
-    return getstatusoutput('%s %s' % ('PATH=/usr/local/bin:/usr/bin:/bin', command))
+def run_command_in_usr_bins(command):
+    return getstatusoutput(
+        "%s %s" % ("PATH=/usr/local/bin:/usr/bin:/bin", command)
+    )
 
 
 def run_ack(args):
-    status, output = run_command_in_path('which ack')
-    ack = status and 'ack' or output
-    ack_command = '%s --files-with-matches --nocolor %%s %%s' % ack
+    status, output = run_command_in_usr_bins("which ack")
+    ack = status and "ack" or output
+    ack_command = "%s --files-with-matches --nocolor %%s %%s" % ack
     command = ack_command % (args_to_strings(args))
-    status, output = run_command_in_path(command)
+    status, output = run_command_in_usr_bins(command)
     if status:
         raise ShellError(status, output)
     return output.splitlines()
@@ -77,10 +73,10 @@ def worded(string):
     >>> worded(r'\<some words') == r'\<some words\>'
     True
     """
-    if string[:2] != r'\<':
-        string = r'\<%s' % string
-    if string[-2:] != r'\>':
-        string = r'%s\>' % string
+    if string[:2] != r"\<":
+        string = r"\<%s" % string
+    if string[-2:] != r"\>":
+        string = r"%s\>" % string
     return string
 
 
@@ -91,10 +87,10 @@ def remove_option(string, char):
     """
     assert char
     copy = string
-    regexp = r'(^|[^-])(-\w*%s\w*)' % char
+    regexp = r"(^|[^-])(-\w*%s\w*)" % char
     for _, match in re.findall(regexp, string):
-        charless = match.replace(char, '')
-        replacement = '' if charless == '-' else charless
+        charless = match.replace(char, "")
+        replacement = "" if charless == "-" else charless
         string = string.replace(match, replacement)
     if copy == string:
         return string, False
@@ -103,40 +99,44 @@ def remove_option(string, char):
 
 def as_vim_args(args):
     """Convert ack args to vim args"""
-    args = convert(args)
-    options, args = parse_args(args)
+    converted = convert(args)
+    options, parsed_args = parse_args(converted)
     option_string = join_args(options)
-    if 'w' in option_string:
-        args = [worded(arg) for arg in args]
-        option_string, _ = remove_option(option_string, 'w')
-    return option_string, join_quoted_args(args)
+    if "w" not in option_string:
+        return option_string, join_quoted_args(parsed_args)
+    vim_args = [worded(arg) for arg in parsed_args]
+    option_string, _ = remove_option(option_string, "w")
+    return option_string, join_quoted_args(vim_args)
 
 
 def as_vim_command(vim_args, path_to_file):
-    return 'vim %s +/%s' % (path_to_file, vim_args)
+    return "vim %s +/%s" % (path_to_file, vim_args)
 
 
 def as_vim_commands(args, paths_to_files):
-    return [as_vim_command(args, quote_arg(path_to_file))
-            for path_to_file in paths_to_files]
+    return [
+        as_vim_command(args, quote_arg(path_to_file))
+        for path_to_file in paths_to_files
+    ]
 
 
 def as_a_vim_command(args, paths_to_files):
-    paths_to_files = ' '.join(['-p'] + [quote_arg(path_to_file)
-                                        for path_to_file in paths_to_files])
+    paths_to_files = " ".join(
+        ["-p"] + [quote_arg(path_to_file) for path_to_file in paths_to_files]
+    )
     return as_vim_command(args, paths_to_files)
 
 
 def run_vim_option():
-    return 'v'
+    return "v"
 
 
 def verbose_option():
-    return 'V'
+    return "V"
 
 
 def write_line(stream, string):
-    stream.write('%s\n' % string)
+    stream.write("%s\n" % string)
 
 
 def use_files(run_vim, args, paths_to_files):
@@ -145,7 +145,7 @@ def use_files(run_vim, args, paths_to_files):
         write_line(sys.stdout, vim_command)
         return os.EX_OK
     vim_commands = as_vim_commands(args, paths_to_files)
-    write_line('\n'.join(vim_commands))
+    write_line("\n".join(vim_commands))
     return os.EX_TEMPFAIL
 
 
@@ -153,7 +153,7 @@ def parse_command_line(args):
     result = []
     any_run_vim = False
     for arg in args:
-        if arg[-1] == '/':
+        if arg[-1] == "/":
             continue
         arg, _ = remove_option(arg, verbose_option())
         if not arg:
@@ -172,10 +172,10 @@ def main(args):
         _, args = as_vim_args(args)
         return use_files(run_vim, args, paths_to_files)
     except ShellError as e:
-        write_line(sys.stderr, '%s\n' % e)
+        write_line(sys.stderr, "%s\n" % e)
         return e.status
     return os.EX_OK
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))

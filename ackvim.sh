@@ -1,6 +1,5 @@
 #! /bin/cat
 
-
 # This script is intended to be sourced, not run
 if [[ $0 == $BASH_SOURCE ]]
 then
@@ -46,6 +45,7 @@ ai () {
     local _options=--python
     [[ $1 == "-t" ]] && _options=--test && shift
     [[ $1 == "-T" ]] && _options=--pyt && shift
+    [[ $1 == "-l" ]] && _options="$_options --files-with-matches" && shift
     local sought=$1; shift
     ack $_options '(import.*'"$sought|$sought"'.*import)' "$@"
 }
@@ -97,7 +97,7 @@ aal () {
 aai () {
     local _regexp=$(convert_regexp "$@")
     local _files=$(ai "$@" -l| tr '\n' ' ')
-    vim -p $_files +/$_regexp
+    vim -p $_files +/"$_regexp"
 }
 
 aap () {
@@ -146,8 +146,8 @@ lack () {
 }
 
 convert_regexp () {
-    VACK_DIR=$(dirname $(readlink -f $BASH_SOURCE))
-    python $VACK_DIR/convert_regexps.py "$@"
+    local python_dir_=$(dirname $(readlink -f $BASH_SOURCE))/ackvim
+    python $python_dir_/convert_regexps.py "$@"
 }
 
 # xxxxx
@@ -163,18 +163,18 @@ run_ack_with () {
     local __doc__="Interpret args, search with ack"
     [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols 2>/dev/null || echo 0)"))"
     local _script="$(readlink -f $BASH_SOURCE)"
-    local _dir="$(dirname $_script)"
-    local _script_py="$_dir/run_ack_with.py"
-    if [[ ! -f $_script_py ]]; then
+    local sh_dir_="$(dirname $_script)" py_dir_="$sh_dir_/ackvim"
+    local py_script_="$py_dir_/run_ack_with.py"
+    if [[ ! -f $py_script_ ]]; then
         [[ -f $_script ]] || echo "$_script is not a file" >&2
-        [[ -d $_dir ]] || echo "$_dir is not a directory" >&2
-        [[ -f $_script_py ]] || echo "$_script_py is not a file" >&2
-        ack "$@"
+        [[ -d $py_dir_ ]] || echo "$py_dir_ is not a directory" >&2
+        [[ -f $py_script_ ]] || echo "$py_script_ is not a file" >&2
+        command ack "$@"
         return 1
     fi
     local _option=-j
     [[ $* =~ -j ]] && _option=
-    $(python $_script_py $_option "$@")
+    $(python $py_script_ $_option "$@")
 }
 
 ack_find () {
@@ -190,7 +190,7 @@ run_ack_vim () {
     local __doc__="Search for args with ack, edit results with vim"
     local _regexp=$(convert_regexp "$@")
     local _files=$(run_ack_with -l "$@" | tr '\n' ' ')
-    [[ $_files ]] && vim -p $_files +/$_regexp
+    [[ $_files ]] && vim -p $_files +/"$_regexp"
 }
 
 ast_find () {
@@ -210,4 +210,3 @@ ast_find () {
     [[ $_type == "def" ]] && _regexp="^$_sought ()"
     $_function $_option --shell $_regexp
 }
-

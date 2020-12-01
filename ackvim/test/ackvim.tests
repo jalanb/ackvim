@@ -1,7 +1,7 @@
 The ackvim module
 ==================
 
-    >>> import ackvim
+    >>> from ackvim import ackvim
 
 Removing options
 ----------------
