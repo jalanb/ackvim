@@ -1,7 +1,7 @@
 The ackvim module
 ==================
 
-    >>> import ackvim
+    >>> from ackvim import ackvim
     >>> assert 'integrate ack with vim' in ackvim.__doc__
 
 Removing options
