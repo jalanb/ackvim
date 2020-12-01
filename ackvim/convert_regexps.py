@@ -17,12 +17,12 @@ def bs_to_brackets(string):
     >>> bs_to_brackets(r'\bword\b') == r'\<word\>'
     True
     """
-    if '\\b' not in string:
+    if "\\b" not in string:
         return string
-    start_of_word = re.compile(r'(^|\W)\\b')
-    string = start_of_word.sub(r'\<', string)
-    end_of_word = re.compile(r'\\b(\w|$)')
-    return end_of_word.sub(r'\>', string)
+    start_of_word = re.compile(r"(^|\W)\\b")
+    string = start_of_word.sub(r"\<", string)
+    end_of_word = re.compile(r"\\b(\w|$)")
+    return end_of_word.sub(r"\>", string)
 
 
 def escape_alternates(string):
@@ -35,9 +35,9 @@ def escape_alternates(string):
     True
     """
     try:
-        string = re.match(r'\((.*)\)', string).group(1)
-        string = string.replace('|', r'\|')
-        return r'\(%s\)' % string if string else '()'
+        string = re.match(r"\((.*)\)", string).group(1)
+        string = string.replace("|", r"\|")
+        return r"\(%s\)" % string if string else "()"
     except AttributeError:
         return string
 
@@ -49,26 +49,27 @@ def convert(strings):
 
 
 def ack_help(help_):
-    output = getoutput(
-        'PATH=/usr/local/bin:/usr/bin:/bin ack --%s' % help_)
-    return [_[2:] for _ in output.splitlines() if _.startswith('  -')]
+    output = getoutput("PATH=/usr/local/bin:/usr/bin:/bin ack --%s" % help_)
+    return [_[2:] for _ in output.splitlines() if _.startswith("  -")]
 
 
 def ackrc_types():
-    types_set = [_ for _ in ack_help('dump') if _.startswith('--type')]
-    types = (re.split('[:=]', _)[1] for _ in types_set)
-    return ['--(no)?%s' % _ for _ in types]
+    types_set = [_ for _ in ack_help("dump") if _.startswith("--type")]
+    types = (re.split("[:=]", _)[1] for _ in types_set)
+    return ["--(no)?%s" % _ for _ in types]
 
 
 def ack_options():
-    options = ack_help('help') + ack_help('help-types')
-    bare_options = [re.sub(r'\s\s+.*', '', _).split(', ') for _ in options]
-    bare_option_list = [_ for _ in itertools.chain(*bare_options) if _ != '-?']
-    bare_regexps = [_.replace('[no]', '(no)?') for _ in bare_option_list]
+    options = ack_help("help") + ack_help("help-types")
+    bare_options = [re.sub(r"\s\s+.*", "", _).split(", ") for _ in options]
+    bare_option_list = [_ for _ in itertools.chain(*bare_options) if _ != "-?"]
+    bare_regexps = [_.replace("[no]", "(no)?") for _ in bare_option_list]
     bare_regexps.extend(ackrc_types())
-    return ([_.split(' ')[0] for _ in bare_regexps if ' ' in _],
-            [re.split('[=[]', _)[0] for _ in bare_regexps if '=' in _],
-            [_ for _ in bare_regexps if '=' not in _ and ' ' not in _])
+    return (
+        [_.split(" ")[0] for _ in bare_regexps if " " in _],
+        [re.split("[=[]", _)[0] for _ in bare_regexps if "=" in _],
+        [_ for _ in bare_regexps if "=" not in _ and " " not in _],
+    )
 
 
 def match_option(regexps, string):
@@ -89,7 +90,7 @@ def detach_ack_option(args):
     if match_option(spaced, arg):
         i = 2
     if match_option(equalled, arg):
-        if '=' in arg:
+        if "=" in arg:
             i = 1
         else:
             i = 2
@@ -116,17 +117,17 @@ def main(args):
     non_ack_args = remove_ack_arguments(args)
     my_args = non_ack_args
     try:
-        non_ack_args.remove('-j')
+        non_ack_args.remove("-j")
     except ValueError:
-        joiner = ' '
+        joiner = " "
         if len(non_ack_args) == 1:
             my_args = non_ack_args[0].split()
     else:
-        joiner = '.'
+        joiner = "."
     converted = convert(my_args)
     print(joiner.join(converted))
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))
