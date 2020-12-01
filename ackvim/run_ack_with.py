@@ -1,6 +1,5 @@
 """Handle options and regexps between ack and vim"""
 
-from __future__ import print_function
 import os
 import re
 import sys
