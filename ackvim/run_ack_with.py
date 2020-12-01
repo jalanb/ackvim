@@ -4,8 +4,6 @@ import os
 import re
 import sys
 
-__version__ = "0.7.3"
-
 
 def assert_perl_script(path):
     """Raise errors if that path is not a perl script
@@ -41,7 +39,7 @@ def ack_command(joiner, arguments, no_follow_option):
     args = joiner.join([f"'{_}'" for _ in arguments])
     ack = which_ack()
     follow = "" if no_follow_option else "--follow"
-    return f"{ack} {args}"
+    return f"{ack} {follow} {args}"
 
 
 def had_option(args, option):

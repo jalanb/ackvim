@@ -6,7 +6,6 @@ import re
 import sys
 from subprocess import getstatusoutput
 
-from . import __version__
 from .convert_regexps import convert
 
 
