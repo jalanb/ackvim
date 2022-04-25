@@ -59,7 +59,7 @@ al () {
 }
 
 ap () {
-    local _ignores=( /test /tests /lib /__pycache__ )
+    local _ignores=( /test /tests /lib )
     ack_find ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
@@ -105,7 +105,7 @@ aai () {
 }
 
 aap () {
-    local _ignores=( /test /lib /__pycache__ )
+    local _ignores=( /test /tests /lib )
     run_ack_vim ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
