@@ -41,6 +41,10 @@ ah () {
     ack --html "$@"
 }
 
+ahv () {
+    ack --help | vim -
+}
+
 ai () {
     local _options=--python
     [[ $1 == "-t" ]] && _options=--test && shift
@@ -126,6 +130,11 @@ aiw () {
     ack --python "(import.*\b$sought\b|\b$sought\b.import)"
 }
 
+app () {
+    local _ignores=( /lib )
+    ack_find ${_ignores[@]/#\// --ignore-dir } --pyt "$@"
+}
+
 ash () {
     ack_find --shell "$@"
 }
@@ -139,6 +148,11 @@ aaaa () {
 
 aash () {
     run_ack_vim --shell "$@"
+}
+
+aapp () {
+    local _ignores=( /lib )
+    run_ack_vim ${_ignores[@]/#\// --ignore-dir } --pyt "$@"
 }
 
 lack () {
