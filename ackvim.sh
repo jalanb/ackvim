@@ -177,7 +177,8 @@ run_ack_with () {
     local __doc__="Interpret args, search with ack"
     [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols 2>/dev/null || echo 0)"))"
     local _script="$(readlink -f $BASH_SOURCE)"
-    local sh_dir_="$(dirname $_script)" py_dir_="$sh_dir_/ackvim"
+    local sh_dir_="$(dirname $_script)"
+    local py_dir_="$sh_dir_/ackvim"
     local py_script_="$py_dir_/run_ack_with.py"
     if [[ ! -f $py_script_ ]]; then
         [[ -f $_script ]] || echo "$_script is not a file" >&2
