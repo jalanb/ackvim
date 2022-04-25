@@ -64,7 +64,7 @@ ap () {
 }
 
 at () {
-    ack_find --pyt "$@"
+    ack_find --test "$@"
 }
 
 ay () {
@@ -110,7 +110,7 @@ aap () {
 }
 
 aat () {
-    run_ack_vim --pyt "$@"
+    run_ack_vim --test "$@"
 }
 
 aay () {
