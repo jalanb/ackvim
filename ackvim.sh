@@ -189,7 +189,7 @@ run_ack_with () {
     fi
     local _option=-j
     [[ $* =~ -j ]] && _option=
-    $(python $py_script_ $_option "$@")
+    eval $(python $py_script_ $_option "$@")
 }
 
 ack_find () {
