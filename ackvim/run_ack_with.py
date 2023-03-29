@@ -35,59 +35,76 @@ def which_ack():
     return ack
 
 
-def ack_command(joiner, arguments, no_follow_option):
-    args = joiner.join([f"'{_}'" for _ in arguments])
+def ack_command(options, regexps, joiner):
+    strings_ = joiner.join([f"'{_}'" for _ in regexps])
+    option_string = " ".join(options)
     ack = which_ack()
-    follow = "" if no_follow_option else "--follow"
-    return f"{ack} {follow} {args}"
+    return f"{ack} {option_string} {strings_}"
 
 
-def had_option(args, option):
+def had_option(options, option):
     try:
-        args.remove(option)
+        options.remove(option)
         return True
     except ValueError:
         return False
 
 
+def read_options(args):
+    args_ = []
+    options = []
+    nexters = (
+        "--ignore-directory", "--ignore-dir", "--match", "--type",
+        "-A", "-B", "-T"
+    )
+    take_next = False
+    for arg in args:
+        if take_next:
+            options.append(arg)
+            take_next = False
+            continue
+        initial, *_ = arg
+        if initial != '-':
+            destination = options if take_next else args_
+            destination.append(arg)
+            continue
+        if arg in nexters:
+            take_next = True
+        options.append(arg)
+    return options, args_
+
+
+def read_regexps(args):
+    path = "."
+    regexps = []
+    for arg in reversed(args):
+        if path == "." and os.path.isdir(arg):
+            path = arg
+            continue
+        regexp = arg
+        if " " in arg or re.search("[.(]", arg):
+            if " $" in arg:
+                regexp = "'%s'" % arg
+            else:
+                regexp = arg.replace(" ", ".")
+        regexps.append(regexp)
+    return path, regexps
+
+
 def main(args):
     """Run this script as a program"""
-    strings = []
-    regexps = []
-    join_option = had_option(args, "-j")
-    no_follow_option = not had_option(args, "-f")
-    ignoring = False
-    final_dir = ""
-    for word in args:
-        if word == "--ignore-dir":
-            strings.append(word)
-            ignoring = True
-            continue
-        if ignoring:
-            strings.append(word)
-            ignoring = False
-            continue
-        if re.match("-[a-uw-z]*[vV][a-uw-z]*", word):
-            strings[0] = "vack"
-            strings.append(word)
-        elif word.startswith("-"):
-            strings.append(word)
-        elif os.path.isdir(word):
-            final_dir = word
-        else:
-            if " " in word or re.search("[.(]", word):
-                if " $" in word:
-                    regexps.append("'%s'" % word)
-                else:
-                    regexps.append(word.replace(" ", "."))
-            else:
-                regexps.append(word)
+    options, args_ = read_options(args)
+    no_follow_option = not had_option(options, "-f")
+    if not no_follow_option:
+        options.append("--follow")
+    join_regexps = had_option(options, "-j")
+    path, regexps = read_regexps(args_)
     command = ack_command(
-        "." if join_option else " ",
-        regexps if join_option else strings,
-        no_follow_option,
+        options,
+        regexps,
+        "." if join_regexps else " ",
     )
-    print(command, final_dir)
+    print(command, path)
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ aa () {
 }
 
 ac () {
-    ast_find ack_find class "$@"
+    find_class_or_function ack_find class "$@"
 }
 
 ae () {
@@ -34,11 +34,15 @@ ae () {
 }
 
 af () {
-    ast_find ack_find def "$@"
+    find_class_or_function ack_find def "$@"
 }
 
 ah () {
     ack --html "$@"
+}
+
+ahv () {
+    ack --help | vim -
 }
 
 ai () {
@@ -55,12 +59,12 @@ al () {
 }
 
 ap () {
-    local _ignores=( /test /tests /lib /__pycache__ )
+    local _ignores=( /test /tests /lib )
     ack_find ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 at () {
-    ack_find --pyt "$@"
+    ack_find --test "$@"
 }
 
 ay () {
@@ -79,7 +83,7 @@ aaa () {
 }
 
 aac () {
-    ast_find run_ack_vim class "$@"
+    find_class_or_function run_ack_vim class "$@"
 }
 
 aae () {
@@ -87,7 +91,7 @@ aae () {
 }
 
 aaf () {
-    ast_find run_ack_vim def "$@"
+    find_class_or_function run_ack_vim def "$@"
 }
 
 aal () {
@@ -101,12 +105,12 @@ aai () {
 }
 
 aap () {
-    local _ignores=( /test /lib /__pycache__ )
+    local _ignores=( /test /tests /lib )
     run_ack_vim ${_ignores[@]/#\// --ignore-dir } --python "$@"
 }
 
 aat () {
-    run_ack_vim --pyt "$@"
+    run_ack_vim --test "$@"
 }
 
 aay () {
@@ -126,6 +130,11 @@ aiw () {
     ack --python "(import.*\b$sought\b|\b$sought\b.import)"
 }
 
+app () {
+    local _ignores=( /lib )
+    ack_find ${_ignores[@]/#\// --ignore-dir } --pyt "$@"
+}
+
 ash () {
     ack_find --shell "$@"
 }
@@ -139,6 +148,11 @@ aaaa () {
 
 aash () {
     run_ack_vim --shell "$@"
+}
+
+aapp () {
+    local _ignores=( /lib )
+    run_ack_vim ${_ignores[@]/#\// --ignore-dir } --pyt "$@"
 }
 
 lack () {
@@ -163,7 +177,8 @@ run_ack_with () {
     local __doc__="Interpret args, search with ack"
     [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols 2>/dev/null || echo 0)"))"
     local _script="$(readlink -f $BASH_SOURCE)"
-    local sh_dir_="$(dirname $_script)" py_dir_="$sh_dir_/ackvim"
+    local sh_dir_="$(dirname $_script)"
+    local py_dir_="$sh_dir_/ackvim"
     local py_script_="$py_dir_/run_ack_with.py"
     if [[ ! -f $py_script_ ]]; then
         [[ -f $_script ]] || echo "$_script is not a file" >&2
@@ -174,7 +189,7 @@ run_ack_with () {
     fi
     local _option=-j
     [[ $* =~ -j ]] && _option=
-    $(python $py_script_ $_option "$@")
+    eval $(python $py_script_ $_option "$@")
 }
 
 ack_find () {
@@ -193,20 +208,20 @@ run_ack_vim () {
     [[ $_files ]] && vim -p $_files +/"$_regexp"
 }
 
-ast_find () {
-    local __doc__="""Search for a class/def definition in python files"""
-    local _function=$1; shift
-    local _type=$1; shift
+find_class_or_function () {
+    local __doc__="""Search for a class/function definition in python files"""
+    local _find_command=$1; shift
+    local _class_or_function=$1; shift
     local _option=
     local _sought="$@"
     if has_option i $_sought; then
         _option=-i
         _sought=$(remove_option i $_sought)
     fi
-    local _regexp=\\s*${_type}.'[^(]*'"$_sought"
-    $_function $_option --python $_regexp --ignore-dir=tests && return 0
+    local _regexp=\\s*${_class_or_function}.'[^(]*'"$_sought"
+    $_find_command $_option --python $_regexp --ignore-dir=tests && return 0
     _regexp=$_sought
-    [[ $_type == "class" ]] && return 1
-    [[ $_type == "def" ]] && _regexp="^$_sought ()"
-    $_function $_option --shell $_regexp
+    [[ $_class_or_function == "class" ]] && return 1
+    [[ $_class_or_function == "def" ]] && _regexp="^$_sought ()"
+    $_find_command $_option --shell $_regexp
 }
