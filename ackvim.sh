@@ -26,7 +26,7 @@ aa () {
 }
 
 ac () {
-    ast_find ack_find class "$@"
+    find_class_or_function ack_find class "$@"
 }
 
 ae () {
@@ -34,7 +34,7 @@ ae () {
 }
 
 af () {
-    ast_find ack_find def "$@"
+    find_class_or_function ack_find def "$@"
 }
 
 ah () {
@@ -83,7 +83,7 @@ aaa () {
 }
 
 aac () {
-    ast_find run_ack_vim class "$@"
+    find_class_or_function run_ack_vim class "$@"
 }
 
 aae () {
@@ -91,7 +91,7 @@ aae () {
 }
 
 aaf () {
-    ast_find run_ack_vim def "$@"
+    find_class_or_function run_ack_vim def "$@"
 }
 
 aal () {
@@ -208,20 +208,20 @@ run_ack_vim () {
     [[ $_files ]] && vim -p $_files +/"$_regexp"
 }
 
-ast_find () {
-    local __doc__="""Search for a class/def definition in python files"""
-    local _function=$1; shift
-    local _type=$1; shift
+find_class_or_function () {
+    local __doc__="""Search for a class/function definition in python files"""
+    local _find_command=$1; shift
+    local _class_or_function=$1; shift
     local _option=
     local _sought="$@"
     if has_option i $_sought; then
         _option=-i
         _sought=$(remove_option i $_sought)
     fi
-    local _regexp=\\s*${_type}.'[^(]*'"$_sought"
-    $_function $_option --python $_regexp --ignore-dir=tests && return 0
+    local _regexp=\\s*${_class_or_function}.'[^(]*'"$_sought"
+    $_find_command $_option --python $_regexp --ignore-dir=tests && return 0
     _regexp=$_sought
-    [[ $_type == "class" ]] && return 1
-    [[ $_type == "def" ]] && _regexp="^$_sought ()"
-    $_function $_option --shell $_regexp
+    [[ $_class_or_function == "class" ]] && return 1
+    [[ $_class_or_function == "def" ]] && _regexp="^$_sought ()"
+    $_find_command $_option --shell $_regexp
 }
