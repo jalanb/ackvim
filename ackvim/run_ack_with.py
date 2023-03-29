@@ -77,8 +77,8 @@ def read_options(args):
 def read_regexps(args):
     path = "."
     regexps = []
-    for arg in args:
-        if os.path.isdir(arg):
+    for arg in reversed(args):
+        if path == "." and os.path.isdir(arg):
             path = arg
             continue
         regexp = arg
