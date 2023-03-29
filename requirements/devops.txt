@@ -1,0 +1,8 @@
+-r testing.txt
+
+bumpversion
+pyupgrade
+tox
+setuptools
+twine
+wheel

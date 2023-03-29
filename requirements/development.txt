@@ -1,7 +1,13 @@
--r testing.txt
+-r devops.txt
 
 ipython
-rich
 pudb
+pytest-icdiff
+pytest-instafail
+pytest-random-order
 pytest-pudb
+pytest-sugar
+requests
 sh
+pytest-pudb
+pytest-sugar
