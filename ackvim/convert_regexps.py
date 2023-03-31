@@ -14,8 +14,7 @@ def bs_to_brackets(string):
 
     ack uses the former, vim the latter, to mean start (or end) of word
 
-    >>> bs_to_brackets(r'\bword\b') == r'\<word\>'
-    True
+    >>> assert bs_to_brackets(r'\bword\b') == r'\<word\>'
     """
     if "\\b" not in string:
         return string
@@ -31,8 +30,7 @@ def escape_alternates(string):
     Not a generic solution for alternates
         just covers the simple case
 
-    >>> escape_alternates('(aaa|bbb|ccc)') == r'\(aaa\|bbb\|ccc\)'
-    True
+    >>> assert escape_alternates('(aaa|bbb|ccc)') == r'\(aaa\|bbb\|ccc\)'
     """
     try:
         string = re.match(r"\((.*)\)", string).group(1)

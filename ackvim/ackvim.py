@@ -68,10 +68,8 @@ def worded(string):
     r"""Add vim-style \< \> around each string
 
 
-    >>> worded('word') == r'\<word\>'
-    True
-    >>> worded(r'\<some words') == r'\<some words\>'
-    True
+    >>> assert worded('word') == r'\<word\>'
+    >>> assert worded(r'\<some words') == r'\<some words\>'
     """
     if string[:2] != r"\<":
         string = r"\<%s" % string
