@@ -159,9 +159,23 @@ lack () {
     ack_find -l "$@"
 }
 
+ack_python () {
+    local ack_dir_=$(dirname $(readlink -f $BASH_SOURCE))
+    local python_="${ack_dir_}/.venv/bin/python3"
+    if [[ -x "$python_" ]]; then
+        echo $python_
+        return 0
+    else
+        echo python3
+        return 1
+    fi
+}
+
 convert_regexp () {
-    local python_dir_=$(dirname $(readlink -f $BASH_SOURCE))/ackvim
-    python $python_dir_/convert_regexps.py "$@"
+    local ack_dir_=$(dirname $(readlink -f $BASH_SOURCE))
+    local python_dir_=${ack_dir_}/ackvim
+    local python_="$(ack_python)"
+    "$python_" "$python_dir_/convert_regexps.py" "$@"
 }
 
 # xxxxx
@@ -175,7 +189,7 @@ clack () {
 
 run_ack_with () {
     local __doc__="Interpret args, search with ack"
-    [[ $* =~ -l ]] || python -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols 2>/dev/null || echo 0)"))"
+    [[ $* =~ -l ]] || python3 -c "print('\n\033[0;36m%s\033[0m\n' % ('#' * "$(tput cols 2>/dev/null || echo 0)"))"
     local _script="$(readlink -f $BASH_SOURCE)"
     local sh_dir_="$(dirname $_script)"
     local py_dir_="$sh_dir_/ackvim"
@@ -189,7 +203,8 @@ run_ack_with () {
     fi
     local _option=-j
     [[ $* =~ -j ]] && _option=
-    eval $(python $py_script_ $_option "$@")
+    local python_="$(ack_python)"
+    eval $("$python_" "$py_script_" $_option "$@")
 }
 
 ack_find () {
