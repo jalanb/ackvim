@@ -6,7 +6,8 @@ import os
 import re
 import sys
 import itertools
-from subprocess import getoutput
+
+from ackvim.commands import ack_help
 
 
 def bs_to_brackets(string):
@@ -44,11 +45,6 @@ def convert(strings):
     bracketed_strings = [bs_to_brackets(_) for _ in strings]
     escaped_strings = [escape_alternates(_) for _ in bracketed_strings]
     return escaped_strings
-
-
-def ack_help(help_):
-    output = getoutput("PATH=/usr/local/bin:/usr/bin:/bin ack --%s" % help_)
-    return [_[2:] for _ in output.splitlines() if _.startswith("  -")]
 
 
 def ackrc_types():
