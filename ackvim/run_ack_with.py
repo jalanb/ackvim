@@ -4,42 +4,13 @@ import os
 import re
 import sys
 
-
-def assert_perl_script(path):
-    """Raise errors if that path is not a perl script
-
-    It is a perl script if it
-        1. is a file, and
-        2.a. has a '.pl' extension, or
-        2.b. mentions 'perl' in first line
-    """
-    if not os.path.isfile(path):
-        raise NotImplementedError('"%s" is not a file' % path)
-
-    _stem, ext = os.path.splitext(path)
-    if ext == ".pl":
-        return
-    with open(path) as stream:
-        if "perl" in stream.readline():
-            return
-    raise NotImplementedError("%s is not a perl script" % path)
+from ackvim.commands import which_ack
 
 
-def which_ack():
-    """Find the system 'ack' in shell's environemnt, or with which
-
-    Should be a perl script
-    """
-    ack = os.environ.get("ACK") or "/usr/local/bin/ack"
-    assert_perl_script(ack)
-    return ack
-
-
-def ack_command(options, regexps, joiner):
-    strings_ = joiner.join([f"'{_}'" for _ in regexps])
+def ack_command(options, regexps, joiner, path):
+    strings = joiner.join([f"'{_}'" for _ in regexps])
     option_string = " ".join(options)
-    ack = which_ack()
-    return f"{ack} {option_string} {strings_}"
+    return f"{which_ack()} {option_string} {strings} {path}"
 
 
 def had_option(options, option):
@@ -103,8 +74,9 @@ def main(args):
         options,
         regexps,
         "." if join_regexps else " ",
+        path,
     )
-    print(command, path)
+    print(command)
 
 
 if __name__ == "__main__":
